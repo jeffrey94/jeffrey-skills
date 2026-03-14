@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "gemini-ads": {
+      "command": "npx",
+      "args": ["tsx", "${CLAUDE_PLUGIN_ROOT}/servers/gemini-ad-server.ts"],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    }
+  }
+}

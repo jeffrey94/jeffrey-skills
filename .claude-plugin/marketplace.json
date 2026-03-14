@@ -16,6 +16,12 @@
       "source": "./whatsapp-summarizer",
       "description": "Transcribe WhatsApp voice messages and photos using Gemini, then summarize conversations with Claude. Supports date filtering, clarifying context, and structured summaries.",
       "version": "1.0.0"
+    },
+    {
+      "name": "ads-visual-fs",
+      "source": "./ads-visual-fs",
+      "description": "AI-powered ad creative generation for Funding Societies. Reimagine existing ads, refine elements, resize for platforms, and create from briefs — all with FS brand compliance built in.",
+      "version": "0.2.0"
     }
   ]
 }

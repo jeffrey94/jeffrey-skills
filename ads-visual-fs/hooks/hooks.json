@@ -1,0 +1,14 @@
+{
+  "PostToolUse": [
+    {
+      "matcher": "mcp__ads-visual_gemini-ads__generate_ad_image|mcp__ads-visual_gemini-ads__refine_ad_element|mcp__ads-visual_gemini-ads__resize_ad_image",
+      "hooks": [
+        {
+          "type": "prompt",
+          "prompt": "An ad image was just generated. Verify it meets Funding Societies brand compliance:\n\n1. Were FS brand colors (#F1F1F2 Light Gray, #FFDE0F Yellow, #5203EA Purple, #27E4CD Teal, #2C50FF Blue) specified in the generation prompt?\n2. Were Poppins/Inter fonts specified?\n3. Were negative prompts included (no gambling, casino, rockets, memes)?\n4. Was a regulatory disclaimer included if the ad targets a specific market?\n\nIf any check fails, warn the user about the brand compliance issue. If all checks pass, confirm brand compliance silently.",
+          "timeout": 15
+        }
+      ]
+    }
+  ]
+}
