@@ -5,7 +5,7 @@ description: >
   resizing, or review. Enforces FS brand colors, typography, tone, logo usage, and
   regulatory compliance. This is a shared compliance capability that enhances all workflows.
 metadata:
-  version: "0.4.0"
+  version: "0.6.0"
 ---
 
 # Funding Societies Brand Compliance
@@ -72,6 +72,37 @@ This skill auto-activates during ANY ad creative workflow. Apply these rules to 
 - **TH**: "Registered under SEC Thailand"
 - **VN**: "Licensed under SBV regulations"
 
+## Logo Placement Standard
+
+- **Default position:** Top-right corner
+- **Format:** 2-line logotype (primary) per brand guidelines
+- **Clear space:** ≥1× logo mark width on all sides
+- **On busy backgrounds:** Add subtle semi-transparent backing
+- **Consistent across all ads in a campaign set**
+
+## CTA Button Standard
+
+- **Style:** Solid brand yellow (#FFDE0F) with dark text, OR frosted glass effect
+- **Pick ONE style per campaign** and apply consistently
+- **Sizing:** ~40% frame width (feed/square), ~60% frame width (story/vertical)
+- **Position:** Bottom-center, second most prominent element after headline
+- **Font:** Poppins SemiBold, high contrast
+
+## Disclaimer Styling Standard
+
+- **Position:** Bottom of frame, left-aligned
+- **Font:** Inter Light, smallest legible size
+- **Must not overlap** with CTA button or hero imagery
+- **Consistent styling** across all ads in a campaign set
+
+## Campaign Colorways
+
+Two approved background systems:
+1. **Warm** — Yellow/amber gradient (#FFDE0F dominant) — primary, matches approved style reference
+2. **Cool** — Purple (#5203EA) with teal (#27E4CD) accents — for variety/carousel rotation
+
+Both use the same layout grid and type hierarchy.
+
 ## Prompt Injection Template
 
 **This template MUST be appended to EVERY prompt passed to ALL `generate-image.ts` script calls.** It is not optional — every image generation call should include these constraints:
@@ -81,7 +112,14 @@ Brand colors: Light Gray #F1F1F2, Yellow #FFDE0F, Purple #5203EA, Teal #27E4CD, 
 Typography: Poppins SemiBold for headings, Inter Regular for body.
 Tone: professional, trustworthy, empowering.
 Do not include: gambling, casino, rockets, memes, aggressive lending, predatory language, illegible text.
+Keep on-visual text minimal: headline (max 5 words), CTA button, logo, disclaimer only.
+Do not render body copy, bullet points, or detailed offer text on the image.
 ```
+
+## Platform-Specific Rules
+
+For platform-specific constraints, read `references/platform-rules.md` when
+generating for a specific platform.
 
 ## Compliance Validation Checklist
 
