@@ -27,22 +27,27 @@ Present results in a structured table. Then ask:
 
 Wait for user confirmation. Do NOT proceed until the user confirms.
 
-## Step 1b — Select Mandatory Copy for Visuals
+## Step 1b — Select Visual Elements
 
-Present each extracted copy element individually and ask the user to select which ones should appear in the generated visuals:
+Present each extracted copy element and the logo option individually. Ask the user to select which should appear in the generated visuals:
 
+**Copy Elements:**
 - [ ] **H1 Headline**: "<extracted text>"
 - [ ] **Support Line**: "<extracted text>"
 - [ ] **CTA Label**: "<extracted text>"
 - [ ] **Trust Signals**: "<extracted text>"
 - [ ] **Legal/Disclaimer**: "<extracted text>"
 
-> **Which copy elements should appear in the generated visuals? Select all that apply, or choose 'none' for visual-only output.**
+**Brand Elements:**
+- [ ] **FS Logo**: Include Funding Societies logo
+
+> **Which elements should appear in the generated visuals? Select all that apply, or choose 'none' for visual-only output.**
 
 When generating concept prompts in Step 2:
 - If copy elements are selected: include them with layout instructions ("Reserve appropriate visual space ONLY for the selected mandatory copy elements. Follow hierarchical order and ensure each element is legible.")
 - If no copy selected: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes."
 - Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
+- If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
 
 ## Step 2 — Generate 3 Concept Variations
 
@@ -74,10 +79,20 @@ Wait for user selection.
 For each selected concept, run the generation script via Bash:
 
 ```bash
+# If FS Logo was NOT selected in Step 1b:
 ${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
   --prompt "<concept prompt with FS brand constraints>" \
   --image "./ads-output/reimagine/<concept-title-slug>.png" \
   --ref "$1" \
+  --strength <from concept settings> \
+  --ar "<auto-detected from source>" \
+  --json
+
+# If FS Logo WAS selected in Step 1b:
+${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
+  --prompt "<concept prompt with FS brand constraints>" \
+  --image "./ads-output/reimagine/<concept-title-slug>.png" \
+  --ref "$1" ${CLAUDE_PLUGIN_ROOT}/assets/fs-logo.png \
   --strength <from concept settings> \
   --ar "<auto-detected from source>" \
   --json

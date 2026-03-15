@@ -50,6 +50,28 @@ Present all copy to the user:
 
 Wait for confirmation.
 
+## Step 2b — Select Visual Elements
+
+After copy is confirmed, ask the user which elements should be rendered in the visual:
+
+**Copy Elements:**
+- [ ] **H1 Headline**: "<confirmed text>"
+- [ ] **Support Line**: "<confirmed text>"
+- [ ] **CTA Label**: "<confirmed text>"
+- [ ] **Trust Signals**: "<confirmed text>"
+- [ ] **Regulatory Disclaimer**: "<confirmed text>"
+
+**Brand Elements:**
+- [ ] **FS Logo**: Include Funding Societies logo
+
+> **Which elements should appear in the generated visuals? Select all that apply, or choose 'none' for visual-only output.**
+
+When generating concept prompts in Step 3:
+- If copy elements are selected: include them with layout instructions ("Reserve appropriate visual space ONLY for the selected mandatory copy elements. Follow hierarchical order and ensure each element is legible.")
+- If no copy selected: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes."
+- Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
+- If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
+
 ## Step 3 — Generate 3 Concept Variations
 
 Generate 3 creative concepts yourself:
@@ -100,14 +122,23 @@ When the concept-generation skill produces concepts, each includes an "Image Gen
 For each selected concept, run the script via Bash:
 
 ```bash
+# If FS Logo was NOT selected in Step 2b (and no user-provided logo):
 ${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
   --prompt "<concept prompt with FS brand colors (#F1F1F2, #FFDE0F, #5203EA, #27E4CD, #2C50FF), Poppins/Inter fonts, and negative prompts>" \
   --image "./ads-output/create/<campaign-slug>/<level>.png" \
   --ar "<from target platform>" \
   --json
+
+# If FS Logo WAS selected in Step 2b:
+${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
+  --prompt "<concept prompt with FS brand colors, Poppins/Inter fonts, and negative prompts>" \
+  --image "./ads-output/create/<campaign-slug>/<level>.png" \
+  --ref ${CLAUDE_PLUGIN_ROOT}/assets/fs-logo.png \
+  --ar "<from target platform>" \
+  --json
 ```
 
-If user provided a logo image, add `--ref <logo-path> --strength 0.2` so it's used as a loose reference.
+If the user also provided their own logo image via `$3`, use that instead of the bundled logo: `--ref <user-logo-path>`.
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
