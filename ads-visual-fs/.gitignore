@@ -1,1 +1,4 @@
 .worktrees/
+.env
+ads-output/
+node_modules/

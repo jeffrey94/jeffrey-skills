@@ -37,7 +37,7 @@ Auto-trigger on natural language — same orchestration as commands.
 | resize | "resize for Instagram", "make platform versions", "adapt for social" |
 | create | "create an ad for", "design a new ad", "make marketing visuals" |
 
-### Shared Skills (6)
+### Shared Skills (4)
 
 Context-activated domain expertise — auto-activates during workflows.
 
@@ -46,8 +46,6 @@ Context-activated domain expertise — auto-activates during workflows.
 | marketing-analysis | Marketing inference on ad images | Reimagine |
 | composition-analysis | Visual element/layout analysis | Refine, Resize |
 | concept-generation | Creative concept variations | Reimagine, Create |
-| image-generation | Text-to-image (no reference) | Create |
-| image-editing | Image-to-image (with reference) | Reimagine, Refine, Resize |
 | brand-compliance | Any FS ad creative work | All 4 |
 
 ### Image Generation Script
@@ -88,6 +86,67 @@ Or the script will fall back to `npx -y bun` if bun is not installed.
 ### 3. Install the Plugin
 
 Install from GitHub: `jeffrey94/jeffrey-skills` → `ads-visual-fs`
+
+### 4. Preflight Check
+
+Run the preflight script to verify everything is set up correctly:
+
+```bash
+bash scripts/preflight.sh
+```
+
+This checks: Bun installation, API key validity, script accessibility, input folder, and CLAUDE.md presence.
+
+## Getting the Best Results
+
+The plugin works out of the box with slash commands, but you'll get significantly better output by setting up your project with the right context.
+
+### Recommended Project Structure
+
+```
+your-project/
+├── CLAUDE.md              # Agent role, behavior, brand context
+├── .env                   # GEMINI_API_KEY=your-key (never commit this)
+├── input/                 # Source materials
+│   ├── branding-guide.pdf # Brand guidelines, visual identity
+│   ├── target-segment.pdf # Audience personas, segments
+│   ├── style-ref.jpg      # Visual style references
+│   └── brief.pdf          # Campaign brief (optional)
+└── ads-output/            # Generated images (auto-created)
+```
+
+### Setting Up CLAUDE.md
+
+A `CLAUDE.md` file tells Claude how to behave in your project. For marketing work, define the agent's role, workflow guidance, brand reference, and input awareness.
+
+A ready-to-use template is included in the plugin:
+
+```bash
+cp examples/CLAUDE.md.example ./CLAUDE.md
+```
+
+The template frames Claude as a marketing executive who asks strategic questions (objective, audience, market, channels) before producing visuals. Customize it for your team's workflow.
+
+### Input Materials That Improve Output
+
+| Material | Why It Helps | Format |
+|----------|-------------|--------|
+| **Branding guide** | Enforces correct colors, fonts, logo usage, tone | PDF, image |
+| **Target segment doc** | Sharpens messaging for the right audience | PDF, text |
+| **Style references** | Gives visual direction beyond brand guidelines | JPG, PNG |
+| **Campaign brief** | Provides objective, offer, channels, constraints | PDF, text |
+| **Existing ads** | Source material for `/reimagine`, `/refine`, `/resize` | JPG, PNG |
+| **Competitor examples** | Context for differentiation and positioning | JPG, PNG |
+
+The more context you provide in `./input/`, the less back-and-forth is needed and the more on-brand the output will be.
+
+### Tips
+
+- **Strategy before visuals** — Start by discussing the campaign objective and audience. Use `/create` only after the brief is clear.
+- **Right command for the job** — `/reimagine` for fresh concepts from an existing ad, `/refine` for surgical edits, `/resize` for platform adaptation.
+- **Iterate in sequence** — A typical flow: `/create` → pick the best → `/refine` to polish → `/resize` for all platforms.
+- **Provide style references** — A single reference image can dramatically improve visual consistency across generated ads.
+- **Review the analysis step** — Each command presents its analysis for confirmation. Correct any misinterpretations before generation.
 
 ## Usage
 
