@@ -5,7 +5,7 @@ description: >
   (SAFE/BOLD/EXPERIMENTAL) for ad campaigns. Produces titles, rationales, and image
   generation prompts. This is a shared creative capability, not a user-facing workflow.
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Concept Generation
