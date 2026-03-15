@@ -27,9 +27,13 @@ Present results in a structured table. Then ask:
 
 Wait for user confirmation. Do NOT proceed until the user confirms.
 
-## Step 1b — Select Visual Elements
+## Step 1b — Platform & Visual Elements
 
-Present each extracted copy element and the logo option individually. Ask the user to select which should appear in the generated visuals:
+Ask the user:
+
+> **What platform is this ad for?** (e.g., Instagram Feed, LinkedIn, TikTok)
+
+Then present each extracted copy element and the logo option individually. Ask the user to select which should appear in the generated visuals:
 
 **Copy Elements:**
 - [ ] **H1 Headline**: "<extracted text>"
@@ -48,6 +52,26 @@ When generating concept prompts in Step 2:
 - If no copy selected: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes."
 - Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
 - If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
+
+Wait for user selection.
+
+### Platform Recommendations
+
+After the user selects elements, read `brand-compliance/references/platform-rules.md`
+for the target platform and present recommendations:
+
+> **Recommended for [Platform Name]:**
+> Based on [platform] best practices, we recommend including only:
+> - ✅ Headline (max 5 words)
+> - ✅ CTA button
+> - ✅ FS Logo
+> - ✅ Regulatory disclaimer (small)
+>
+> These elements are better in the **ad caption** (not on the visual):
+> - Support line
+> - Trust signals
+>
+> You can override these recommendations using the checkboxes above.
 
 ## Step 2 — Generate 3 Concept Variations
 
@@ -127,3 +151,21 @@ Present the output file paths. Then offer:
 - **Regenerate** — Try again with a modified prompt
 - **Refine** — Make targeted changes to a result (→ suggest `/refine`)
 - **Resize** — Adapt results for platforms (→ suggest `/resize`)
+
+## Step 4b — Ad Caption Copy
+
+Provide the full marketing copy formatted for the target platform's caption field:
+
+**Ad Caption:**
+> [Full headline — can be longer than the on-visual version]
+>
+> [Support line / value proposition]
+>
+> [Trust signals and social proof]
+>
+> [CTA with link placeholder]
+>
+> [Regulatory disclaimer]
+
+Present this alongside the generated image paths so the user has both the visual
+and the caption ready to use.

@@ -29,7 +29,7 @@ Collect all answers before proceeding.
 
 Using the brief and FS brand guidelines, construct:
 
-- **H1 Headline** — Primary text (under 8 words)
+- **H1 Headline** — Primary text (max 5 words for on-visual use; full version goes to ad caption)
 - **Support Line** — Secondary proof point (one sentence)
 - **CTA Label** — Action button text (2-4 words)
 - **Trust Signals** — License info, track record, social proof
@@ -71,6 +71,26 @@ When generating concept prompts in Step 3:
 - If no copy selected: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes."
 - Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
 - If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
+
+Wait for user selection.
+
+### Platform Recommendations
+
+After the user selects elements, read `brand-compliance/references/platform-rules.md`
+for the target platform and present recommendations:
+
+> **Recommended for [Platform Name]:**
+> Based on [platform] best practices, we recommend including only:
+> - ✅ Headline (max 5 words)
+> - ✅ CTA button
+> - ✅ FS Logo
+> - ✅ Regulatory disclaimer (small)
+>
+> These elements are better in the **ad caption** (not on the visual):
+> - Support line
+> - Trust signals
+>
+> You can override these recommendations using the checkboxes above.
 
 ## Step 3 — Generate 3 Concept Variations
 
@@ -151,3 +171,21 @@ Present all generated image paths. Offer:
 - **Regenerate** — Try again with modified brief or concept
 - **Refine** — Make targeted changes (→ suggest `/refine`)
 - **Resize** — Adapt for additional platforms (→ suggest `/resize`)
+
+## Step 5b — Ad Caption Copy
+
+Provide the full marketing copy formatted for the target platform's caption field:
+
+**Ad Caption:**
+> [Full headline — can be longer than the on-visual version]
+>
+> [Support line / value proposition]
+>
+> [Trust signals and social proof]
+>
+> [CTA with link placeholder]
+>
+> [Regulatory disclaimer]
+
+Present this alongside the generated image paths so the user has both the visual
+and the caption ready to use.

@@ -5,7 +5,7 @@ description: >
   (SAFE/BOLD/EXPERIMENTAL) for ad campaigns. Produces titles, rationales, and image
   generation prompts. This is a shared creative capability, not a user-facing workflow.
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # Concept Generation
@@ -31,6 +31,9 @@ This skill provides domain expertise when you need to generate creative concepts
 - **What Stays**: Product as hero, core message, brand identity
 - **Image Strength**: 0.70–0.80
 - **Risk**: Medium
+- **Single focal point:** Bold means bolder color/graphic treatment, NOT more
+  elements. One hero subject per ad. Use geometric brand shapes (teal curves,
+  purple angles) for visual energy instead of adding figures or panels.
 
 ### Level 3 — EXPERIMENTAL (TRANSCEND)
 - **Conceptual Distance**: High. Genre-shift allowed.
@@ -53,6 +56,44 @@ For each concept, produce:
    - Style and mood direction
    - Negative prompts (no gambling, casino, rockets, memes, illegible text)
 4. **Settings** — image_strength matching the concept level (SAFE: 0.55–0.65, BOLD: 0.70–0.80, EXPERIMENTAL: 0.85–0.95), and aspect_ratio from the source image or target platform. The image_strength is passed as `--strength` to the generate-image.ts script when a reference image is used (Reimagine). For Create (text-to-image, no reference), image_strength is not applicable.
+
+## Visual Text Density
+
+AI image generation models struggle with rendering long text accurately. Fewer
+words = higher legibility and correct spelling.
+
+### On-Visual Elements (max)
+- **Headline:** Max 5 words. Shorter is better.
+- **CTA button:** 2-4 words
+- **Logo:** Via reference image
+- **Regulatory disclaimer:** One line, small
+
+### NOT on Visual (move to ad caption)
+- Support lines / body copy
+- Bullet points / feature lists
+- Trust signals / social proof details
+- Offer details / pricing
+
+### Format-Specific Layouts
+Read `../brand-compliance/references/platform-rules.md` for the target platform,
+then apply:
+- **Feed (1:1, 4:3):** Reduced layout — headline + hero subject + CTA + logo
+- **Story (9:16):** Can add ONE support line if space allows
+- **Leaderboard (16:9 wide):** Headline + CTA only — extremely compact
+- **Skyscraper (vertical):** Vertical stack — logo → headline → image → CTA
+
+## Ad Caption Output
+
+After generating images, ALSO provide the full marketing copy formatted for the
+platform's ad caption/description field. Include:
+- Full headline (can be longer than the on-visual version)
+- Support line / value proposition
+- Trust signals and social proof
+- CTA text
+- Offer details
+- Regulatory disclaimer
+
+Format as ready-to-paste text for the target platform.
 
 ## Prompt Engineering Guidelines
 

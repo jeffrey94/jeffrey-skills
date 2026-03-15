@@ -68,6 +68,16 @@ Wait for selection.
 
 ## Step 3 — Generate Resized Versions
 
+For each target platform, read `brand-compliance/references/platform-rules.md`
+and apply the platform-specific rules to the recomposition prompt:
+- Adjust text density per platform (e.g., Google Leaderboard = headline + CTA only)
+- Respect safe zones (e.g., TikTok right-side buttons, story bottom overlay)
+- Adapt CTA sizing per format (~40% feed, ~60% story)
+
+Append the relevant platform constraints as an additional line in the recomposition
+prompt, e.g.: "Apply [platform] safe zones and text density limits: [key rules
+extracted from platform-rules.md]."
+
 For each selected platform, run the script via Bash with composition context:
 
 Use ratio descriptions for the prompt:
