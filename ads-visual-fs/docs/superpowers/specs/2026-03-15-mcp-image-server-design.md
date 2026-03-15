@@ -13,9 +13,11 @@ Wrap the Gemini image generation logic as an MCP stdio server. The API key is co
 ### What changes
 
 1. **New: `servers/gemini-image.ts`** — MCP stdio server exposing a `generate_image` tool
-2. **New: `.mcp.json`** — MCP server declaration with `${GEMINI_API_KEY}` env config
+2. **New: `.mcp.json`** — MCP server declaration with env config for API key and optional overrides
 3. **Update: `commands/*.md`** (all 4) — Replace bash script calls with MCP tool calls; remove `Bash` from `allowed-tools`
-4. **Keep: `scripts/generate-image.ts`** — Remains as standalone CLI fallback for Claude Code users
+4. **Update: `.claude-plugin/plugin.json`** — Bump version to 0.5.0
+5. **Update: `README.md`** — Add MCP server setup instructions for Cowork
+6. **Keep: `scripts/generate-image.ts`** — Remains as standalone CLI fallback for Claude Code users
 
 ### What stays the same
 
@@ -54,15 +56,17 @@ Returns (JSON):
 
 **Implementation approach:**
 
-- Reuse the core Gemini API logic from `scripts/generate-image.ts`: `callGeminiApi()`, `readImageAsBase64()`, `saveImage()`, `extractImageData()`
-- Implement MCP stdio protocol: read JSON-RPC from stdin, write responses to stdout
-- API key read from `process.env.GEMINI_API_KEY` (injected by MCP config)
+- Copy the core Gemini API logic from `scripts/generate-image.ts` into the server file: `callGeminiApi()`, `readImageAsBase64()`, `saveImage()`, `extractImageData()`, `getApiKey()`, `getModel()`, `getBaseUrl()`. The server is a self-contained file — no shared imports with the CLI script to avoid coupling.
+- Use `@modelcontextprotocol/sdk` for the MCP stdio transport — handles JSON-RPC framing, capability negotiation, and protocol compliance. Install via `bun add @modelcontextprotocol/sdk`.
+- API key read from `process.env.GEMINI_API_KEY` or `process.env.GOOGLE_API_KEY` (same fallback as CLI script, injected by MCP config)
 - Model and base URL configurable via `GEMINI_IMAGE_MODEL` and `GOOGLE_BASE_URL` env vars (same as current script)
 - Stderr used for logging (same convention as current script)
+- All `output_path` values are resolved to absolute paths using `path.resolve()` before writing, so relative paths from commands work correctly regardless of the server's working directory
 
-**MCP protocol messages to handle:**
+**MCP protocol messages handled by SDK:**
 
-- `initialize` — Return server info and capabilities
+- `initialize` — Return server info and capabilities (tool support)
+- `notifications/initialized` — Acknowledged automatically by SDK
 - `tools/list` — Return the `generate_image` tool definition
 - `tools/call` — Execute image generation, return result
 
@@ -75,14 +79,17 @@ Returns (JSON):
       "command": "bun",
       "args": ["${CLAUDE_PLUGIN_ROOT}/servers/gemini-image.ts"],
       "env": {
-        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}",
+        "GOOGLE_API_KEY": "${GOOGLE_API_KEY}",
+        "GEMINI_IMAGE_MODEL": "${GEMINI_IMAGE_MODEL}",
+        "GOOGLE_BASE_URL": "${GOOGLE_BASE_URL}"
       }
     }
   }
 }
 ```
 
-If `bun` is not available, the command falls back to `npx -y bun` — this should be documented in the README but the `.mcp.json` should use `bun` directly (Cowork environments typically have it available).
+Only `GEMINI_API_KEY` or `GOOGLE_API_KEY` is required (one or the other). `GEMINI_IMAGE_MODEL` and `GOOGLE_BASE_URL` are optional overrides. If `bun` is not available, document `npx -y bun` as a fallback in the README.
 
 ### 3. Command Updates
 
@@ -103,6 +110,9 @@ ${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
 ```
 
 **After (MCP tool call):**
+
+The MCP tool name follows the pattern `mcp__<plugin>_<server-key>__<tool>`. Since the server key in `.mcp.json` is `gemini-image` and the plugin is `ads-visual-fs`, the mangled name is `mcp__ads_visual_fs_gemini_image__generate_image`. Verify the exact name at runtime with `tools/list`.
+
 ```markdown
 allowed-tools: Read, mcp__ads_visual_fs_gemini_image__generate_image
 ```
@@ -138,9 +148,17 @@ The MCP server inherits the same error handling as the CLI script:
 ## Dependencies
 
 - **Runtime**: Bun (same as current)
-- **MCP protocol**: Implemented directly via stdin/stdout JSON-RPC (no SDK dependency needed for stdio)
+- **MCP SDK**: `@modelcontextprotocol/sdk` — handles stdio transport and protocol compliance
 - **Node built-ins**: `fs`, `path` (same as current)
 - **External API**: Gemini API (same as current)
+
+## Known Issues
+
+- **Aspect ratio inconsistencies in `resize.md`**: Some platform specs have mismatched ratios (e.g., LinkedIn Feed lists `4:3 (1200x627)` which is not actually 4:3). These are pre-existing issues in the commands, not introduced by this change. Consider fixing as a follow-up.
+
+## CLI Fallback
+
+The CLI script (`scripts/generate-image.ts`) is preserved for Claude Code users but is **not** an automatic fallback. If the MCP server is unavailable (e.g., missing API key), commands should surface the error to the user with setup instructions rather than silently falling back to bash.
 
 ## File Tree (after changes)
 
