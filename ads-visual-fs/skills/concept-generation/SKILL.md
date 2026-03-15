@@ -63,3 +63,12 @@ For each concept, produce:
 - Include negative prompts to avoid: gambling imagery, memes, rockets, aggressive language
 - **Anti-recursive-embedding**: Always include in prompts: "The reference image IS the ad to reimagine. Transform and remix its visual elements directly into a new creative. DO NOT treat the reference as content to display within a scene (not on a monitor, billboard, poster, or screen)."
 - **Copy direction**: All marketing copy must address the viewing audience. Never depict copy as text shown to or viewed by characters within the scene.
+
+## Copy and Logo Selection
+
+The calling workflow (Create or Reimagine) will specify which copy elements and whether the FS logo should appear in the generated visuals. Respect these selections when building prompts:
+
+- **If copy elements are selected**: include the exact text for each selected element with specific layout positioning (e.g., "Headline 'Grow Your Business' in Poppins SemiBold, centered top-third"). Do NOT include copy elements that were not selected.
+- **If no copy is selected**: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes." Do NOT invent or add text.
+- **If FS Logo is selected**: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects." The logo will be passed as a reference image to the generation script.
+- **If FS Logo is not selected**: do NOT mention logo placement in the prompt.
