@@ -20,8 +20,8 @@
     {
       "name": "ads-visual-fs",
       "source": "./ads-visual-fs",
-      "description": "AI-powered ad creative generation for Funding Societies. Reimagine existing ads, refine elements, resize for platforms, and create from briefs — all with FS brand compliance built in.",
-      "version": "0.6.0"
+      "description": "AI-powered ad creative generation for Funding Societies. Reimagine existing ads, refine elements, resize for platforms, create from briefs, and generate FS-branded ads inspired by competitor creatives — all with FS brand compliance built in.",
+      "version": "0.7.0"
     }
   ]
 }

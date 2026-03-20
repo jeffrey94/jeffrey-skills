@@ -5,11 +5,12 @@ AI-powered ad creative generation plugin for Funding Societies. Reimagine existi
 ## Architecture
 
 ```
-/reimagine  → [marketing-analysis] → [concept-generation] → [generate-image.ts]
-/refine     → [composition-analysis] ─────────────────────→ [generate-image.ts]
-/resize     → [composition-analysis] ─────────────────────→ [generate-image.ts]
-/create     → [concept-generation] ───────────────────────→ [generate-image.ts]
-                              ↑ [brand-compliance] applied to ALL ↑
+/reimagine            → [marketing-analysis] → [concept-generation] → [generate-image.ts]
+/refine               → [composition-analysis] ─────────────────────→ [generate-image.ts]
+/resize               → [composition-analysis] ─────────────────────→ [generate-image.ts]
+/create               → [concept-generation] ───────────────────────→ [generate-image.ts]
+/competitor-reference  → [competitor-analysis] → [concept-generation] → [generate-image.ts]
+                                    ↑ [brand-compliance] applied to ALL ↑
 
 Claude does: analysis, concept generation, brand compliance (native LLM capabilities)
 Script does: image generation via Gemini API (scripts/generate-image.ts)
@@ -17,7 +18,7 @@ Script does: image generation via Gemini API (scripts/generate-image.ts)
 
 ## Components
 
-### Commands (4)
+### Commands (5)
 
 | Command | Description |
 |---------|-------------|
@@ -25,8 +26,9 @@ Script does: image generation via Gemini API (scripts/generate-image.ts)
 | `/refine <image> [intent]` | Refine specific elements while preserving the rest |
 | `/resize <image> [platforms]` | Adapt for different platform formats |
 | `/create` | Create a new ad from a marketing brief |
+| `/competitor-reference <image>` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
 
-### Workflow Skills (4)
+### Workflow Skills (5)
 
 Auto-trigger on natural language — same orchestration as commands.
 
@@ -36,8 +38,9 @@ Auto-trigger on natural language — same orchestration as commands.
 | refine | "change the headline", "adjust the CTA", "tweak this ad" |
 | resize | "resize for Instagram", "make platform versions", "adapt for social" |
 | create | "create an ad for", "design a new ad", "make marketing visuals" |
+| competitor-reference | "analyze this competitor ad", "do something like this competitor ad", "inspired by this ad" |
 
-### Shared Skills (4)
+### Shared Skills (5)
 
 Context-activated domain expertise — auto-activates during workflows.
 
@@ -45,8 +48,9 @@ Context-activated domain expertise — auto-activates during workflows.
 |-------|--------------------|---------|
 | marketing-analysis | Marketing inference on ad images | Reimagine |
 | composition-analysis | Visual element/layout analysis | Refine, Resize |
-| concept-generation | Creative concept variations | Reimagine, Create |
-| brand-compliance | Any FS ad creative work | All 4 |
+| concept-generation | Creative concept variations | Reimagine, Create, Competitor Reference |
+| competitor-analysis | Creative strategy extraction from competitor ads | Competitor Reference |
+| brand-compliance | Any FS ad creative work | All 5 |
 
 ### Image Generation Script
 
@@ -157,6 +161,7 @@ The more context you provide in `./input/`, the less back-and-forth is needed an
 /refine ./path/to/ad.png make CTA more urgent
 /resize ./path/to/ad.png instagram linkedin tiktok
 /create
+/competitor-reference ./path/to/competitor-ad.png
 ```
 
 ### Natural Language
@@ -166,6 +171,8 @@ The more context you provide in `./input/`, the less back-and-forth is needed an
 "Change the headline to '48-Hour Funding'" (attach image)
 "Resize this for Instagram and LinkedIn" (attach image)
 "Create an ad for our SME loan targeting Singapore"
+"I love this competitor ad, can we do something similar for FS?" (attach competitor image)
+"Analyze this Alliance Bank ad and create FS versions" (attach image)
 ```
 
 ## Output
@@ -177,7 +184,8 @@ ads-output/
 ├── create/<campaign-name>/
 ├── reimagine/<concept-title>.png
 ├── refine/<description>.png
-└── resize/<platform>.png
+├── resize/<platform>.png
+└── competitor-reference/<competitor-slug>/<concept-title>.png
 ```
 
 ## Brand Guidelines (FSMY, May 2025)
