@@ -5,7 +5,7 @@ description: >
   (SAFE/BOLD/EXPERIMENTAL) for ad campaigns. Produces titles, rationales, and image
   generation prompts. This is a shared creative capability, not a user-facing workflow.
 metadata:
-  version: "0.6.0"
+  version: "0.7.1"
 ---
 
 # Concept Generation
@@ -63,7 +63,7 @@ AI image generation models struggle with rendering long text accurately. Fewer
 words = higher legibility and correct spelling.
 
 ### On-Visual Elements (max)
-- **Headline:** Max 5 words. Shorter is better.
+- **Headline:** Default max 5 words. See `../brand-compliance/references/platform-rules.md` for platform-specific limits (LinkedIn: 7, TikTok/YouTube: 4). Shorter is better.
 - **CTA button:** 2-4 words
 - **Logo:** Via reference image
 - **Regulatory disclaimer:** One line, small

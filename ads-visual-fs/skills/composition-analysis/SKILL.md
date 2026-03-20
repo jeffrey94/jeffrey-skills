@@ -5,7 +5,7 @@ description: >
   of an ad image. Maps elements with positions for refine and resize workflows. This is a
   shared analysis capability, not a user-facing workflow.
 metadata:
-  version: "0.4.0"
+  version: "0.7.1"
 ---
 
 # Composition Analysis

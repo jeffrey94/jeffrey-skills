@@ -106,6 +106,7 @@ New visual metaphor. Rebuilt composition with a fresh storytelling angle. Produc
 Genre-shift. Unexpected visual language. Only product identity and message persist.
 
 For each concept, present: title, rationale, detailed image generation prompt (with FS brand colors and fonts injected, plus negative prompts: no gambling, casino, rockets, memes).
+   - Negative prompts: no gambling, casino, rockets, memes, aggressive lending language, illegible text, generic stock photos
 
 > **Which concepts would you like me to generate? (1, 2, 3, or all)**
 
@@ -162,7 +163,11 @@ If the user also provided their own logo image via `$3`, use that instead of the
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
-**Error handling**: If the script fails, wait 5 seconds and retry once. If it still fails, present the error and offer to modify the prompt. If a content policy violation occurs, present the error and offer to adjust the prompt language.
+**Error handling**:
+- Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
+- Content policy violation: present the error, offer to modify the prompt
+- No image data returned: retry with simplified prompt
+- Other failures: present the error and offer to try a different prompt
 
 ## Step 5 — Review
 

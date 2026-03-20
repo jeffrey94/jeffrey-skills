@@ -80,6 +80,8 @@ extracted from platform-rules.md]."
 
 For each selected platform, run the script via Bash with composition context:
 
+**Brand compliance**: Append the brand compliance prompt injection template from `brand-compliance/SKILL.md` to every generation prompt.
+
 Use ratio descriptions for the prompt:
 - 9:16 → "Vertical stories/reels format"
 - 16:9 → "Wide format for YouTube/display"

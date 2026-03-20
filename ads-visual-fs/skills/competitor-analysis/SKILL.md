@@ -7,7 +7,7 @@ description: >
   mapping each to FS brand equivalents. This is a shared analysis capability, not a
   user-facing workflow.
 metadata:
-  version: "0.7.0"
+  version: "0.7.1"
 ---
 
 # Competitor Analysis

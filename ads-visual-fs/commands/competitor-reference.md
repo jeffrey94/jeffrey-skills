@@ -55,7 +55,8 @@ Based on the confirmed competitor analysis (especially dimensions 6: Emotional A
 > | Headline (max 5 words) | [e.g., rhyming format] | [Your suggestion based on FS product and competitor strategy] |
 > | Support Line | [e.g., stats-based proof] | [Your suggestion] |
 > | CTA (2-4 words) | [e.g., urgency-driven] | [Your suggestion — FS uses empowering, not aggressive CTAs] |
-> | Disclaimer | — | [Auto: market-specific regulatory text from brand-compliance] |
+> | Regulatory Disclaimer | — | [Auto: market-specific regulatory text from brand-compliance] |
+> | Trust Signals | — | [e.g., "100,000+ SMEs funded", license info, social proof] |
 >
 > **Edit the copy above, then confirm. This is what will appear in the generated ads.**
 
@@ -66,10 +67,11 @@ Wait for user to finalize copy. Do NOT proceed until the user confirms their cop
 After copy is confirmed, present checkboxes for which elements appear in the generated visuals:
 
 **Copy Elements:**
-- [ ] **Headline**: "[confirmed headline]"
+- [ ] **H1 Headline**: "[confirmed headline]"
 - [ ] **Support Line**: "[confirmed support line]"
 - [ ] **CTA Label**: "[confirmed CTA]"
-- [ ] **Disclaimer**: "[confirmed disclaimer]"
+- [ ] **Regulatory Disclaimer**: "[confirmed disclaimer]"
+- [ ] **Trust Signals**: "[any trust signals from the confirmed copy, e.g., '100,000+ SMEs funded']"
 
 **Brand Elements:**
 - [ ] **FS Logo**: Include Funding Societies logo

@@ -5,7 +5,7 @@ description: >
   resizing, or review. Enforces FS brand colors, typography, tone, logo usage, and
   regulatory compliance. This is a shared compliance capability that enhances all workflows.
 metadata:
-  version: "0.6.0"
+  version: "0.7.1"
 ---
 
 # Funding Societies Brand Compliance
@@ -63,6 +63,7 @@ This skill auto-activates during ANY ad creative workflow. Apply these rules to 
 - Never alter logo colors or proportions
 - Never use aggressive or predatory lending language
 - Never make claims without regulatory disclaimers
+- Never use generic stock photos unrelated to SMEs
 
 ## Regulatory Disclaimers (by Market)
 
@@ -111,9 +112,11 @@ Both use the same layout grid and type hierarchy.
 Brand colors: Light Gray #F1F1F2, Yellow #FFDE0F, Purple #5203EA, Teal #27E4CD, Blue #2C50FF.
 Typography: Poppins SemiBold for headings, Inter Regular for body.
 Tone: professional, trustworthy, empowering.
-Do not include: gambling, casino, rockets, memes, aggressive lending, predatory language, illegible text.
+Do not include: gambling, casino, rockets, memes, aggressive lending, predatory language, illegible text, generic stock photos.
 Keep on-visual text minimal: headline (max 5 words), CTA button, logo, disclaimer only.
 Do not render body copy, bullet points, or detailed offer text on the image.
+All marketing copy must address the viewing audience directly. Never depict copy as text shown to or viewed by characters in the scene.
+The reference image IS the ad creative. Transform its elements directly. DO NOT treat it as content displayed within a scene (not on a monitor, billboard, poster, or screen).
 ```
 
 ## Platform-Specific Rules

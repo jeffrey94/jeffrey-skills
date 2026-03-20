@@ -40,7 +40,7 @@ Then present each extracted copy element and the logo option individually. Ask t
 - [ ] **Support Line**: "<extracted text>"
 - [ ] **CTA Label**: "<extracted text>"
 - [ ] **Trust Signals**: "<extracted text>"
-- [ ] **Legal/Disclaimer**: "<extracted text>"
+- [ ] **Regulatory Disclaimer**: "<extracted text>"
 
 **Brand Elements:**
 - [ ] **FS Logo**: Include Funding Societies logo
@@ -101,6 +101,8 @@ Wait for user selection.
 ## Step 3 — Generate Images
 
 For each selected concept, run the generation script via Bash:
+
+**Brand compliance**: Append the brand compliance prompt injection template from `brand-compliance/SKILL.md` to every generation prompt.
 
 ```bash
 # If FS Logo was NOT selected in Step 1b:

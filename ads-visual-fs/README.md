@@ -23,7 +23,7 @@ Script does: image generation via Gemini API (scripts/generate-image.ts)
 | Command | Description |
 |---------|-------------|
 | `/reimagine <image>` | Reimagine an ad with 3 concept variations (SAFE/BOLD/EXPERIMENTAL) |
-| `/refine <image> [intent]` | Refine specific elements while preserving the rest |
+| `/refine <image> [changes]` | Refine specific elements while preserving the rest |
 | `/resize <image> [platforms]` | Adapt for different platform formats |
 | `/create` | Create a new ad from a marketing brief |
 | `/competitor-reference <image>` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
@@ -183,7 +183,7 @@ Generated images are saved to `./ads-output/` organized by workflow:
 ads-output/
 ├── create/<campaign-name>/
 ├── reimagine/<concept-title>.png
-├── refine/<description>.png
+├── refine/<description>-v{1,2,3}.png
 ├── resize/<platform>.png
 └── competitor-reference/<competitor-slug>/<concept-title>.png
 ```

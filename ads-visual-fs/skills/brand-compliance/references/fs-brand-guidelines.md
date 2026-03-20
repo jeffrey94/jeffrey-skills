@@ -86,7 +86,7 @@
 
 | Market | Entity | Regulator | Disclaimer |
 |--------|--------|-----------|------------|
-| Singapore | Funding Societies Pte Ltd | MAS | "Holds a Capital Markets Services Licence (CMS101541)" |
+| Singapore | Funding Societies Pte Ltd | MAS | "Funding Societies Pte Ltd holds a Capital Markets Services Licence (CMS101541)" |
 | Malaysia | Modalku Ventures Sdn Bhd | SC | "Registered with the Securities Commission Malaysia" |
 | Indonesia | PT Modalku Finansial Teknologi | OJK | "Terdaftar dan diawasi oleh OJK" |
 | Thailand | — | SEC | "Registered under SEC Thailand" |

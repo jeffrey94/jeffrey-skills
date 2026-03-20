@@ -1,7 +1,7 @@
 ---
 name: refine
 description: Refine specific elements of an ad while preserving the rest
-argument-hint: <image-path> [description of changes]
+argument-hint: <image-path> [changes]
 allowed-tools: Read, Bash
 ---
 
@@ -56,6 +56,8 @@ Wait for confirmation.
 ## Step 4 — Generate Refined Images
 
 Generate 3 variations by running the script via Bash, with slight prompt variations for diversity:
+
+**Brand compliance**: Append the brand compliance prompt injection template from `brand-compliance/SKILL.md` to every generation prompt.
 
 ```bash
 ${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
