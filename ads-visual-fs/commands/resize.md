@@ -108,7 +108,7 @@ Process platforms sequentially to avoid rate limits.
 - No image data returned: retry with simplified prompt
 - Other failures: log the error and continue with remaining platforms
 
-See `${CLAUDE_PLUGIN_ROOT}/scripts/references/platform-specs.md` for detailed platform dimensions, safe zones, and platform key mapping.
+See `brand-compliance/references/platform-rules.md` for detailed platform dimensions, safe zones, and layout guidance.
 
 ## Step 4 — Review
 

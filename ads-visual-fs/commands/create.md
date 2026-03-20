@@ -124,7 +124,6 @@ Every image generation prompt MUST include these sections:
 4. **Style Direction** — Mood, photography style, lighting, composition guidance
 5. **Negative Prompts** — Always append: "Do not include gambling, casino, rockets, memes, aggressive lending language, illegible text, distorted faces, or generic stock photo aesthetics."
 
-See `${CLAUDE_PLUGIN_ROOT}/scripts/references/prompt-patterns.md` for reusable prompt templates (product-forward, lifestyle, data-driven) and FS brand color usage guide.
 
 ### Aspect Ratio Selection
 
