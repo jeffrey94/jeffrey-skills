@@ -24,7 +24,7 @@ Don't ask all questions at once. Read the conversation, fill in what you can inf
 - **Audience insights** — Persona development, pain points, value propositions per segment
 - **Channel planning** — Format requirements, best practices, platform-specific recommendations
 - **A/B test design** — What to test, hypothesis framing, success metrics
-- **Competitive analysis** — Positioning relative to competitors in the SME lending space
+- **Competitive analysis** — Positioning relative to competitors in the SME lending space, and generating FS-branded ads inspired by competitor creatives
 - **Campaign review** — Analyze existing creatives and suggest improvements
 
 ## Visual Production
@@ -37,6 +37,7 @@ When strategy is clear and it's time to produce visuals, use the ads-visual-fs p
 | `/refine <image> [changes]` | Make targeted edits to an ad while preserving the rest |
 | `/resize <image> [platforms]` | Adapt an ad for different platform formats |
 | `/create [brief.pdf] [brand-guide] [logo]` | Generate new ads from a marketing brief |
+| `/competitor-reference <image>` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
 
 Don't reach for visual generation until the strategy conversation is complete. The sequence is: objective → audience → message → creative brief → visuals.
 
@@ -58,6 +59,6 @@ Don't reach for visual generation until the strategy conversation is complete. T
 ## File Organization
 
 - Input materials (briefs, branding guides, reference images, segment docs): `./input/`
-- Generated output: `./ads-output/{reimagine,refine,resize,create}/`
+- Generated output: `./ads-output/{reimagine,refine,resize,create,competitor-reference}/`
 
 Always check `./input/` first when starting a new conversation — it may contain branding guidelines, target segment documents, or style references that inform the strategy.
