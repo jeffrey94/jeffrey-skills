@@ -4,16 +4,111 @@ AI-powered ad creative generation plugin for Funding Societies. Reimagine existi
 
 ## Architecture
 
-```
-/reimagine            → [marketing-analysis] → [concept-generation] → [generate-image.ts]
-/refine               → [composition-analysis] ─────────────────────→ [generate-image.ts]
-/resize               → [composition-analysis] ─────────────────────→ [generate-image.ts]
-/create               → [concept-generation] ───────────────────────→ [generate-image.ts]
-/competitor-reference  → [competitor-analysis] → [concept-generation] → [generate-image.ts]
-                                    ↑ [brand-compliance] applied to ALL ↑
+### Plugin Structure
 
-Claude does: analysis, concept generation, brand compliance (native LLM capabilities)
-Script does: image generation via Gemini API (scripts/generate-image.ts)
+```
+ads-visual-fs/
+│
+├── .claude-plugin/
+│   └── plugin.json (v0.8.2)
+│
+├── commands/                          ┌─────────────────────────────┐
+│   ├── create.md ─────────────────────┤  All commands reference:    │
+│   ├── reimagine.md ──────────────────┤  • ask-user-protocol skill  │
+│   ├── competitor-reference.md ───────┤  • brand-compliance skill   │
+│   ├── refine.md ─────────────────────┤  • generate-image.ts script │
+│   └── resize.md ─────────────────────┤                             │
+│                                      └─────────────────────────────┘
+├── skills/
+│   ├── ask-user-protocol/             Shared UX protocol
+│   │   └── SKILL.md                   (conversational 4-section format)
+│   │       ├── Pattern A: Platform Selection (two-step)
+│   │       ├── Pattern B: Visual Element Presets
+│   │       ├── Pattern C: Concept Selection (w/ previews)
+│   │       └── Pattern D: Next Action
+│   │
+│   ├── brand-compliance/
+│   │   ├── SKILL.md                   Colors, fonts, tone, don'ts
+│   │   └── references/
+│   │       ├── fs-brand-guidelines.md
+│   │       └── platform-rules.md      Referenced by Pattern A & B
+│   │
+│   ├── concept-generation/
+│   │   ├── SKILL.md                   3 levels: SAFE/BOLD/EXPERIMENTAL
+│   │   └── references/               Strength: 0.85-0.95 / 0.55-0.70 / 0.20-0.40
+│   │       └── concept-levels.md
+│   │
+│   ├── composition-analysis/
+│   │   ├── SKILL.md                   Element mapping for /refine, /resize
+│   │   └── references/
+│   │       └── element-schema.md
+│   │
+│   ├── marketing-analysis/
+│   │   ├── SKILL.md                   Marketing inference for /reimagine
+│   │   └── references/
+│   │       └── analysis-schema.md
+│   │
+│   └── competitor-analysis/
+│       ├── SKILL.md                   8-dimension analysis for /competitor-ref
+│       └── references/
+│           └── analysis-dimensions.md
+│
+├── scripts/
+│   ├── generate-image.ts              Gemini API caller (bun)
+│   └── preflight.sh                   Environment check
+│
+├── assets/
+│   └── fs-logo.png                    Bundled FS logo
+│
+└── ads-output/                        Generated images land here
+    ├── create/
+    ├── reimagine/
+    ├── refine/
+    ├── resize/
+    └── competitor-reference/
+```
+
+### Data Flow
+
+```
+User Input
+    │
+    ▼
+┌──────────┐     ┌───────────────────┐     ┌──────────────────┐
+│ Command  │────▶│ ask-user-protocol │────▶│ AskUserQuestion  │
+│ (.md)    │     │ (4-section format)│     │ (structured UI)  │
+└──────────┘     └───────────────────┘     └──────────────────┘
+    │                                              │
+    │  reads domain skills:                        │ user picks
+    │  • brand-compliance                          ▼
+    │  • concept-generation              ┌──────────────────┐
+    │  • marketing-analysis              │ Concept prompts  │
+    │  • competitor-analysis             │ generated by LLM │
+    │  • composition-analysis            └────────┬─────────┘
+    │                                             │
+    ▼                                             ▼
+┌──────────────────┐                   ┌──────────────────┐
+│ platform-rules   │──── constraints ─▶│ generate-image.ts│
+│ brand-guidelines │──── brand inject ▶│ (Gemini API)     │
+└──────────────────┘                   └────────┬─────────┘
+                                                │
+                                                ▼
+                                       ┌──────────────────┐
+                                       │ ads-output/*.png  │
+                                       └──────────────────┘
+```
+
+### Skill Usage Matrix
+
+```
+                brand    concept   composition  marketing  competitor  ask-user
+                comply   gen       analysis     analysis   analysis    protocol
+─────────────── ──────── ───────── ──────────── ────────── ────────── ─────────
+/create           ✓        ✓                                             ✓
+/reimagine        ✓        ✓                       ✓                     ✓
+/competitor-ref   ✓        ✓                                  ✓          ✓
+/refine           ✓                    ✓                                 ✓
+/resize           ✓                    ✓                                 ✓
 ```
 
 ## Components
