@@ -107,13 +107,16 @@ Using the confirmed analysis, confirmed copy, and selected elements, generate 3 
 All 3 levels stay on the **copy axis** — how much of the competitor's creative DNA survives — not the "creative freedom" axis (which is what `/reimagine` uses). This is what makes `/competitor-reference` distinct.
 
 ### Level 1 — Direct Adaptation
-Closely follows the competitor's layout structure, visual metaphor, element placement, and composition. Everything is translated into FS brand system but the creative DNA is clearly recognizable. Image strength: **0.55–0.65**.
+Closely follows the competitor's layout structure, visual metaphor, element placement, and composition. Everything is translated into FS brand system but the creative DNA is clearly recognizable. Image strength: **0.85–0.95** (very closely follow reference).
+- **DNA preservation:** The concept prompt MUST explicitly reference ALL 8 analysis dimensions from Step 2 — layout, metaphor, colors, typography, imagery, emotion, messaging, attention flow.
 
 ### Level 2 — Blended Adaptation
-Keeps the strongest elements from the competitor (e.g., the layout OR the visual metaphor, not necessarily both) and remixes the rest with FS creative direction. ~50% competitor DNA, ~50% original FS. Image strength: **0.70–0.80**.
+Keeps the strongest elements from the competitor (e.g., the layout OR the visual metaphor, not necessarily both) and remixes the rest with FS creative direction. ~50% competitor DNA, ~50% original FS. Image strength: **0.55–0.70** (closely follow reference, prompt guides which elements to remix).
+- **DNA preservation:** The concept prompt MUST explicitly list the 3-4 strongest competitor dimensions to preserve (from Step 2 analysis) and which dimensions to remix with FS creative direction.
 
 ### Level 3 — Creative Riff
-Inspired by the competitor's emotional appeal and one key creative insight, but composition and execution are original FS work. The competitor influence is felt, not seen. Image strength: **0.85–0.95**.
+Inspired by the competitor's emotional appeal and one key creative insight, but composition and execution are original FS work. The competitor influence is felt, not seen. Image strength: **0.30–0.45** (loosely follow reference, prompt preserves one key insight).
+- **DNA preservation:** The concept prompt MUST explicitly name the 1 competitor dimension being preserved (typically emotional appeal or attention mechanics) and describe how it manifests in the FS execution.
 
 For each concept, present:
 - **Title** — A catchy name for the concept
@@ -193,13 +196,13 @@ Do not render body copy, bullet points, or detailed offer text on the image.
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
-**Image strength guide:**
+**Image strength guide** (`--strength`: 1=exact copy of reference, 0=ignore reference):
 
 | Strength | Effect | Adaptation Level |
 |----------|--------|-----------------|
-| 0.55–0.65 | Close to reference layout | Direct Adaptation — full competitor DNA |
-| 0.70–0.80 | Moderate transformation | Blended Adaptation — ~50% competitor DNA |
-| 0.85–0.95 | Major transformation | Creative Riff — competitor influence felt, not seen |
+| 0.85–0.95 | Very closely follows reference | Direct Adaptation — full competitor DNA |
+| 0.55–0.70 | Closely follows reference, prompt guides remixing | Blended Adaptation — ~50% competitor DNA |
+| 0.30–0.45 | Loosely follows reference, prompt-driven | Creative Riff — competitor influence felt, not seen |
 
 **Error handling**:
 - Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
@@ -215,6 +218,18 @@ Options for `/competitor-reference`:
 - **Regenerate** — Try again with a modified prompt
 - **Refine** — Make targeted changes to a result (-> `/refine`)
 - **Resize** — Adapt results for other platforms (-> `/resize`)
+
+### Regeneration Protocol
+
+When the user chooses "Regenerate" for a concept:
+
+1. **Reuse the EXACT original prompt** from the first generation attempt. Do NOT write a new prompt from scratch.
+2. **Adjust only the strength parameter** — typically increase it by 0.10–0.15 to follow the reference more closely (higher = closer to reference).
+3. **If the user describes specific changes**, make TARGETED edits to the original prompt (add/remove a specific clause), not a full rewrite.
+4. **Append the version suffix** to the output filename: `-v2.png`, `-v3.png`.
+5. **Present both the original and adjusted prompt** so the user can see exactly what changed.
+
+This prevents concept drift — regenerated outputs should be variations of the SAME concept, not entirely new ads.
 
 ### Ad Caption Copy
 

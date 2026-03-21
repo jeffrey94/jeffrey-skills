@@ -4,9 +4,11 @@
 
 | Level | Name | Conceptual Distance | Image Strength | Risk |
 |-------|------|---------------------|---------------|------|
-| 1 | SAFE (REFRAME) | Minimal | 0.55–0.65 | Low |
-| 2 | BOLD (TRANSFORM) | Moderate | 0.70–0.80 | Medium |
-| 3 | EXPERIMENTAL (TRANSCEND) | High | 0.85–0.95 | High |
+| 1 | SAFE (REFRAME) | Minimal | 0.85–0.95 (close to reference) | Low |
+| 2 | BOLD (TRANSFORM) | Moderate | 0.55–0.70 (moderate divergence) | Medium |
+| 3 | EXPERIMENTAL (TRANSCEND) | High | 0.20–0.40 (loose, prompt-driven) | High |
+
+**Note:** `--strength` controls how closely output follows the reference image (1=exact, 0=ignore). Higher strength = less divergence.
 
 ## Level 1 — SAFE (REFRAME)
 

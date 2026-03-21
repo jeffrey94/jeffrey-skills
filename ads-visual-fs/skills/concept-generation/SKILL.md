@@ -22,14 +22,14 @@ This skill provides domain expertise when you need to generate creative concepts
 - **Conceptual Distance**: Minimal. Refine the proven approach.
 - **What Changes**: Execution quality, copy polish, color refinement
 - **What Stays**: Same visual language, same composition structure, same metaphor
-- **Image Strength**: 0.55–0.65 (for Reimagine with reference image)
+- **Image Strength**: 0.85–0.95 (closely follows reference — for Reimagine/Competitor-Reference with reference image)
 - **Risk**: Low
 
 ### Level 2 — BOLD (TRANSFORM)
 - **Conceptual Distance**: Moderate. New visual metaphor.
 - **What Changes**: Storytelling approach, composition, visual metaphor
 - **What Stays**: Product as hero, core message, brand identity
-- **Image Strength**: 0.70–0.80
+- **Image Strength**: 0.55–0.70 (moderate divergence from reference)
 - **Risk**: Medium
 - **Single focal point:** Bold means bolder color/graphic treatment, NOT more
   elements. One hero subject per ad. Use geometric brand shapes (teal curves,
@@ -39,7 +39,7 @@ This skill provides domain expertise when you need to generate creative concepts
 - **Conceptual Distance**: High. Genre-shift allowed.
 - **What Changes**: Everything except product identity and message
 - **What Stays**: Product/service recognition, core marketing message
-- **Image Strength**: 0.85–0.95
+- **Image Strength**: 0.20–0.40 (loose reference, prompt-driven transformation)
 - **Risk**: High — but potential for breakthrough creative
 
 ## Concept Output Format
@@ -55,7 +55,7 @@ For each concept, produce:
    - Copy elements to include (headline, CTA, trust signals)
    - Style and mood direction
    - Negative prompts (no gambling, casino, rockets, memes, illegible text)
-4. **Settings** — image_strength matching the concept level (SAFE: 0.55–0.65, BOLD: 0.70–0.80, EXPERIMENTAL: 0.85–0.95), and aspect_ratio from the source image or target platform. The image_strength is passed as `--strength` to the generate-image.ts script when a reference image is used (Reimagine). For Create (text-to-image, no reference), image_strength is not applicable.
+4. **Settings** — image_strength matching the concept level (SAFE: 0.85–0.95, BOLD: 0.55–0.70, EXPERIMENTAL: 0.20–0.40), and aspect_ratio from the source image or target platform. The `--strength` parameter controls how closely the output follows the reference (1=exact copy, 0=ignore reference). Higher strength = closer to reference. SAFE stays close, EXPERIMENTAL diverges most. For Create (text-to-image, no reference), image_strength is not applicable.
 
 ## Visual Text Density
 

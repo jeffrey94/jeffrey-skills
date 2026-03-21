@@ -66,13 +66,13 @@ When generating concept prompts in Step 2:
 Using the confirmed insights, generate 3 creative concept variations yourself.
 
 ### Level 1 — SAFE (REFRAME)
-Refined execution of the proven approach. Minimal conceptual distance. Keep the same visual language but elevate the execution quality. Image strength: **0.55–0.65** (close to original).
+Refined execution of the proven approach. Minimal conceptual distance. Keep the same visual language but elevate the execution quality. Image strength: **0.85–0.95** (very closely follows reference).
 
 ### Level 2 — BOLD (TRANSFORM)
-New visual metaphor, rebuilt composition. The product remains the hero but the storytelling approach changes significantly. Image strength: **0.70–0.80**.
+New visual metaphor, rebuilt composition. The product remains the hero but the storytelling approach changes significantly. Image strength: **0.55–0.70** (moderate divergence from reference).
 
 ### Level 3 — EXPERIMENTAL (TRANSCEND)
-Genre-shift allowed. Only the product identity and core message persist. Everything else can be reimagined. Image strength: **0.85–0.95**.
+Genre-shift allowed. Only the product identity and core message persist. Everything else can be reimagined. Image strength: **0.20–0.40** (loose reference, prompt-driven).
 
 For each concept, present:
 - **Title** — A catchy name for the concept
@@ -126,13 +126,13 @@ Add these to the negative prompts: `reference-ad-shown-as-object-in-scene, recur
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
-**Image strength guide:**
+**Image strength guide** (`--strength`: 1=exact copy of reference, 0=ignore reference):
 
 | Strength | Effect | Use When |
 |----------|--------|----------|
-| 0.55–0.65 | Close to original | SAFE concepts, minor variations |
-| 0.70–0.80 | Moderate transformation | BOLD concepts, new composition |
-| 0.85–0.95 | Major transformation | EXPERIMENTAL concepts, genre shifts |
+| 0.85–0.95 | Very closely follows original | SAFE concepts, minor variations |
+| 0.55–0.70 | Closely follows, moderate divergence | BOLD concepts, new composition |
+| 0.20–0.40 | Loosely follows, prompt-driven | EXPERIMENTAL concepts, genre shifts |
 
 **Error handling**:
 - Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
@@ -148,6 +148,16 @@ Options for `/reimagine`:
 - **Regenerate** — Try again with a modified prompt
 - **Refine** — Make targeted changes to a result (-> `/refine`)
 - **Resize** — Adapt results for platforms (-> `/resize`)
+
+### Regeneration Protocol
+
+When the user chooses "Regenerate" for a concept:
+
+1. **Reuse the EXACT original prompt** from the first generation attempt. Do NOT write a new prompt from scratch.
+2. **Adjust only the strength parameter** — typically increase it by 0.10–0.15 to follow the reference more closely (higher = closer to reference).
+3. **If the user describes specific changes**, make TARGETED edits to the original prompt (add/remove a specific clause), not a full rewrite.
+4. **Append the version suffix** to the output filename: `-v2.png`, `-v3.png`.
+5. **Present both the original and adjusted prompt** so the user can see exactly what changed.
 
 ## Step 4b — Ad Caption Copy
 
