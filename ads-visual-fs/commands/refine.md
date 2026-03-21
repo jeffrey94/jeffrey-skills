@@ -57,6 +57,15 @@ Wait for confirmation.
 
 ## Step 4 — Generate Refined Images
 
+### Prompt Transparency
+
+Before calling the generation script, display the full prompt:
+
+> **Prompt sent to Gemini:**
+> [full prompt text]
+
+If the user says "don't show prompts" or "hide prompts", omit this for subsequent generations within this command invocation.
+
 Generate 3 variations by running the script via Bash, with slight prompt variations for diversity:
 
 **Brand compliance**: Append the brand compliance prompt injection template from `brand-compliance/SKILL.md` to every generation prompt.
@@ -75,11 +84,11 @@ Repeat for v2 and v3 with slight prompt variations.
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
-**Error handling**:
-- Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
-- Content policy violation: present the error, offer to modify the prompt
-- No image data returned: retry with simplified prompt
-- Other failures: present the error and offer to adjust the prompt
+**Error handling**: Follow the error handling pattern in CLAUDE.md.
+
+## Step 4b — Quality Review
+
+After each image is generated, run the **quality self-review** from `quality-review/SKILL.md`. Read the generated image and evaluate for gross brand compliance failures and brief alignment. Auto-retry up to 2 times on gross failures. Present advisory warnings for fine-grained issues.
 
 ## Step 5 — Review
 

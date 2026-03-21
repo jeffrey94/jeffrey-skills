@@ -1,7 +1,7 @@
 ---
 name: reimagine
 description: Reimagine an existing ad with 3 concept variations (SAFE/BOLD/EXPERIMENTAL)
-argument-hint: <image-path>
+argument-hint: <image-path> [--variants N]
 allowed-tools: Read, Bash, AskUserQuestion
 ---
 
@@ -90,6 +90,25 @@ Wait for user selection.
 
 ## Step 3 — Generate Images
 
+### A/B Variants
+
+If the user passed `--variants N` (default 2, max 4): after generating the base image for the selected concept, generate N-1 additional variations. Each variant uses the SAME base prompt with ONE targeted change:
+- Variant 1: Base (original prompt)
+- Variant 2: Alternate CTA text
+- Variant 3: Alternate colorway (warm → cool or vice versa)
+- Variant 4: Headline emphasis shift
+
+Output filenames: `<concept-title-slug>.png`, `<concept-title-slug>-v2.png`, etc.
+
+### Prompt Transparency
+
+Before calling the generation script, display the full prompt:
+
+> **Prompt sent to Gemini:**
+> [full prompt text]
+
+If the user says "don't show prompts" or "hide prompts", omit this for subsequent generations within this command invocation.
+
 For each selected concept, run the generation script via Bash:
 
 **Brand compliance**: Append the brand compliance prompt injection template from `brand-compliance/SKILL.md` to every generation prompt.
@@ -130,11 +149,11 @@ Add these to the negative prompts: `reference-ad-shown-as-object-in-scene, recur
 | 0.55–0.70 | Closely follows, moderate divergence | BOLD concepts, new composition |
 | 0.20–0.40 | Loosely follows, prompt-driven | EXPERIMENTAL concepts, genre shifts |
 
-**Error handling**:
-- Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
-- Content policy violation: present the error, offer to modify the prompt
-- No image data returned: retry with simplified prompt
-- Other failures: present the error and offer to try a different prompt
+**Error handling**: Follow the error handling pattern in CLAUDE.md.
+
+## Step 3b — Quality Review
+
+After each image is generated, run the **quality self-review** from `quality-review/SKILL.md`. Read the generated image and evaluate for gross brand compliance failures and brief alignment. Auto-retry up to 2 times on gross failures. Present advisory warnings for fine-grained issues.
 
 ## Step 4 — Review
 

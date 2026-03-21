@@ -100,9 +100,15 @@ function parseArgs(argv: string[]): CliArgs {
       case "--ar":
         args.ar = argv[++i];
         break;
-      case "--strength":
-        args.strength = parseFloat(argv[++i]);
+      case "--strength": {
+        const val = parseFloat(argv[++i]);
+        if (isNaN(val) || val < 0 || val > 1) {
+          console.error("Error: --strength must be a number between 0 and 1");
+          process.exit(1);
+        }
+        args.strength = val;
         break;
+      }
       case "--json":
         args.json = true;
         break;
@@ -179,7 +185,15 @@ async function callGeminiApi(
         throw new Error(`Gemini API error (${response.status}): ${errText}`);
       }
 
-      return await response.json();
+      try {
+        return await response.json();
+      } catch {
+        if (attempt < maxRetries - 1) {
+          lastError = new Error("Gemini returned invalid JSON response");
+          continue;
+        }
+        throw new Error("Gemini returned invalid JSON response");
+      }
     } catch (err: any) {
       lastError = err;
       if (err.message?.includes("429") || err.message?.includes("503")) continue;
@@ -197,6 +211,39 @@ function extractImageData(response: any): string | null {
     }
   }
   return null;
+}
+
+// --- Logging ---
+
+function logGeneration(entry: {
+  prompt: string;
+  model: string;
+  strength: number | null;
+  aspect_ratio: string | null;
+  result: "success" | "error";
+  output_path: string | null;
+  error_message?: string;
+}): void {
+  try {
+    const logPath = path.resolve("./ads-output/generation-log.jsonl");
+    const logDir = path.dirname(logPath);
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+    const line = JSON.stringify({
+      timestamp: new Date().toISOString(),
+      prompt: entry.prompt.slice(0, 200),
+      model: entry.model,
+      strength: entry.strength,
+      aspect_ratio: entry.aspect_ratio,
+      result: entry.result,
+      output_path: entry.output_path,
+      error_message: entry.error_message,
+    });
+    fs.appendFileSync(logPath, line + "\n");
+  } catch {
+    // Logging should never break generation
+  }
 }
 
 // --- Main ---
@@ -268,6 +315,11 @@ async function main() {
   const imageData = extractImageData(response);
   if (!imageData) {
     const errMsg = "No image data returned from Gemini";
+    logGeneration({
+      prompt: promptText, model, strength: args.strength,
+      aspect_ratio: args.ar, result: "error", output_path: null,
+      error_message: errMsg,
+    });
     if (args.json) {
       console.log(JSON.stringify({ status: "error", error: errMsg }));
     } else {
@@ -278,6 +330,11 @@ async function main() {
 
   const savedPath = saveImage(imageData, args.image);
   console.error(`Image saved to: ${savedPath}`);
+
+  logGeneration({
+    prompt: promptText, model, strength: args.strength,
+    aspect_ratio: args.ar, result: "success", output_path: savedPath,
+  });
 
   if (args.json) {
     console.log(JSON.stringify({

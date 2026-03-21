@@ -1,7 +1,7 @@
 ---
 name: competitor-reference
 description: Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies
-argument-hint: <competitor-image-path>
+argument-hint: <competitor-image-path> [--variants N]
 allowed-tools: Read, Bash, AskUserQuestion
 ---
 
@@ -142,6 +142,25 @@ Wait for user selection.
 
 ## Step 5 — Generate Images
 
+### A/B Variants
+
+If the user passed `--variants N` (default 2, max 4): after generating the base image for the selected concept, generate N-1 additional variations. Each variant uses the SAME base prompt with ONE targeted change:
+- Variant 1: Base (original prompt)
+- Variant 2: Alternate CTA text
+- Variant 3: Alternate colorway (warm → cool or vice versa)
+- Variant 4: Headline emphasis shift
+
+Output filenames: `<competitor-slug>/<concept-title-slug>.png`, `<competitor-slug>/<concept-title-slug>-v2.png`, etc.
+
+### Prompt Transparency
+
+Before calling the generation script, display the full prompt:
+
+> **Prompt sent to Gemini:**
+> [full prompt text]
+
+If the user says "don't show prompts" or "hide prompts", omit this for subsequent generations within this command invocation.
+
 For each selected concept, run the generation script via Bash:
 
 ```bash
@@ -200,11 +219,11 @@ Do not render body copy, bullet points, or detailed offer text on the image.
 | 0.55–0.70 | Closely follows reference, prompt guides remixing | Blended Adaptation — ~50% competitor DNA |
 | 0.30–0.45 | Loosely follows reference, prompt-driven | Creative Riff — competitor influence felt, not seen |
 
-**Error handling**:
-- Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
-- Content policy violation: present the error, offer to modify the prompt
-- No image data returned: retry with simplified prompt
-- Other failures: present the error and offer to try a different prompt
+**Error handling**: Follow the error handling pattern in CLAUDE.md.
+
+## Step 5b — Quality Review
+
+After each image is generated, run the **quality self-review** from `quality-review/SKILL.md`. Read the generated image and evaluate for gross brand compliance failures and brief alignment. Auto-retry up to 2 times on gross failures. Present advisory warnings for fine-grained issues.
 
 ## Step 6 — Review
 

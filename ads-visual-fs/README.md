@@ -10,14 +10,17 @@ AI-powered ad creative generation plugin for Funding Societies. Reimagine existi
 ads-visual-fs/
 │
 ├── .claude-plugin/
-│   └── plugin.json (v0.8.2)
+│   └── plugin.json (v0.9.0)
+│
+├── CLAUDE.md                          Shared error handling pattern
 │
 ├── commands/                          ┌─────────────────────────────┐
 │   ├── create.md ─────────────────────┤  All commands reference:    │
 │   ├── reimagine.md ──────────────────┤  • ask-user-protocol skill  │
 │   ├── competitor-reference.md ───────┤  • brand-compliance skill   │
-│   ├── refine.md ─────────────────────┤  • generate-image.ts script │
-│   └── resize.md ─────────────────────┤                             │
+│   ├── refine.md ─────────────────────┤  • quality-review skill     │
+│   ├── resize.md ─────────────────────┤  • generate-image.ts script │
+│   └── campaign.md (NEW) ────────────┤                             │
 │                                      └─────────────────────────────┘
 ├── skills/
 │   ├── ask-user-protocol/             Shared UX protocol
@@ -48,23 +51,29 @@ ads-visual-fs/
 │   │   └── references/
 │   │       └── analysis-schema.md
 │   │
-│   └── competitor-analysis/
-│       ├── SKILL.md                   8-dimension analysis for /competitor-ref
-│       └── references/
-│           └── analysis-dimensions.md
+│   ├── competitor-analysis/
+│   │   ├── SKILL.md                   8-dimension analysis for /competitor-ref
+│   │   └── references/
+│   │       └── analysis-dimensions.md
+│   │
+│   └── quality-review/ (NEW)
+│       └── SKILL.md                   Post-generation QA (brand compliance check)
 │
 ├── scripts/
-│   ├── generate-image.ts              Gemini API caller (bun)
+│   ├── generate-image.ts              Gemini API caller + JSONL logging (bun)
+│   ├── generate-image.test.ts         Basic tests (bun:test)
 │   └── preflight.sh                   Environment check
 │
 ├── assets/
 │   └── fs-logo.png                    Bundled FS logo
 │
 └── ads-output/                        Generated images land here
+    ├── generation-log.jsonl           Generation history (auto-created)
     ├── create/
     ├── reimagine/
     ├── refine/
     ├── resize/
+    ├── campaign/ (NEW)
     └── competitor-reference/
 ```
 
@@ -94,34 +103,43 @@ User Input
                                                 │
                                                 ▼
                                        ┌──────────────────┐
+                                       │ quality-review   │
+                                       │ (brand QA check) │
+                                       └────────┬─────────┘
+                                                │
+                                                ▼
+                                       ┌──────────────────┐
                                        │ ads-output/*.png  │
+                                       │ generation-log    │
                                        └──────────────────┘
 ```
 
 ### Skill Usage Matrix
 
 ```
-                brand    concept   composition  marketing  competitor  ask-user
-                comply   gen       analysis     analysis   analysis    protocol
-─────────────── ──────── ───────── ──────────── ────────── ────────── ─────────
-/create           ✓        ✓                                             ✓
-/reimagine        ✓        ✓                       ✓                     ✓
-/competitor-ref   ✓        ✓                                  ✓          ✓
-/refine           ✓                    ✓                                 ✓
-/resize           ✓                    ✓                                 ✓
+                brand    concept   composition  marketing  competitor  ask-user  quality
+                comply   gen       analysis     analysis   analysis    protocol  review
+─────────────── ──────── ───────── ──────────── ────────── ────────── ───────── ────────
+/create           ✓        ✓                                             ✓        ✓
+/reimagine        ✓        ✓                       ✓                     ✓        ✓
+/competitor-ref   ✓        ✓                                  ✓          ✓        ✓
+/refine           ✓                    ✓                                 ✓        ✓
+/resize           ✓                    ✓                                 ✓        ✓
+/campaign         ✓        ✓                                             ✓        ✓
 ```
 
 ## Components
 
-### Commands (5)
+### Commands (6)
 
 | Command | Description |
 |---------|-------------|
-| `/reimagine <image>` | Reimagine an ad with 3 concept variations (SAFE/BOLD/EXPERIMENTAL) |
+| `/reimagine <image> [--variants N]` | Reimagine an ad with 3 concept variations (SAFE/BOLD/EXPERIMENTAL) |
 | `/refine <image> [changes]` | Refine specific elements while preserving the rest |
 | `/resize <image> [platforms]` | Adapt for different platform formats |
-| `/create` | Create a new ad from a marketing brief |
-| `/competitor-reference <image>` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
+| `/create [--variants N]` | Create a new ad from a marketing brief |
+| `/campaign [--variants N]` | Generate a full campaign set across multiple platforms from a single brief |
+| `/competitor-reference <image> [--variants N]` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
 
 ### Workflow Skills (5)
 
@@ -135,7 +153,7 @@ Auto-trigger on natural language — same orchestration as commands.
 | create | "create an ad for", "design a new ad", "make marketing visuals" |
 | competitor-reference | "analyze this competitor ad", "do something like this competitor ad", "inspired by this ad" |
 
-### Shared Skills (5)
+### Shared Skills (6)
 
 Context-activated domain expertise — auto-activates during workflows.
 
@@ -143,9 +161,10 @@ Context-activated domain expertise — auto-activates during workflows.
 |-------|--------------------|---------|
 | marketing-analysis | Marketing inference on ad images | Reimagine |
 | composition-analysis | Visual element/layout analysis | Refine, Resize |
-| concept-generation | Creative concept variations | Reimagine, Create, Competitor Reference |
+| concept-generation | Creative concept variations | Reimagine, Create, Campaign, Competitor Reference |
 | competitor-analysis | Creative strategy extraction from competitor ads | Competitor Reference |
-| brand-compliance | Any FS ad creative work | All 5 |
+| brand-compliance | Any FS ad creative work | All 6 |
+| quality-review | Post-generation brand QA check | All 6 |
 
 ### Image Generation Script
 

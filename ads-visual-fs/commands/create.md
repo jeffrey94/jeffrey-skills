@@ -1,7 +1,7 @@
 ---
 name: create
 description: Create a new ad from a marketing brief
-argument-hint: [brief-file] [branding-guide] [logo]
+argument-hint: [brief-file] [branding-guide] [logo] [--variants N]
 allowed-tools: Read, Bash, AskUserQuestion
 ---
 
@@ -122,6 +122,16 @@ Wait for selection.
 
 ## Step 4 — Generate Images
 
+### A/B Variants
+
+If the user passed `--variants N` (default 2, max 4): after generating the base image for the selected concept, generate N-1 additional variations. Each variant uses the SAME base prompt with ONE targeted change:
+- Variant 1: Base (original prompt)
+- Variant 2: Alternate CTA text (e.g., "Apply Now" → "Get Started")
+- Variant 3: Alternate colorway (warm → cool or vice versa)
+- Variant 4: Headline emphasis shift (e.g., benefit-first → urgency-first)
+
+Output filenames: `<campaign-slug>/<level>.png`, `<campaign-slug>/<level>-v2.png`, etc.
+
 ### Prompt Construction
 
 Every image generation prompt MUST include these sections:
@@ -144,6 +154,15 @@ Match `--ar` to target platform:
 ### Handoff from Concept-Generation
 
 When the concept-generation skill produces concepts, each includes an "Image Generation Prompt" field. Use that prompt directly as the `--prompt` argument, after appending the brand-compliance prompt injection template. The concept also specifies `aspect_ratio` — pass it through as `--ar`.
+
+### Prompt Transparency
+
+Before calling the generation script, display the full prompt:
+
+> **Prompt sent to Gemini:**
+> [full prompt text]
+
+If the user says "don't show prompts" or "hide prompts", omit this for subsequent generations within this command invocation.
 
 ### Script Execution
 
@@ -170,11 +189,11 @@ If the user also provided their own logo image via `$3`, use that instead of the
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
-**Error handling**:
-- Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
-- Content policy violation: present the error, offer to modify the prompt
-- No image data returned: retry with simplified prompt
-- Other failures: present the error and offer to try a different prompt
+**Error handling**: Follow the error handling pattern in CLAUDE.md.
+
+## Step 4b — Quality Review
+
+After each image is generated, run the **quality self-review** from `quality-review/SKILL.md`. Read the generated image and evaluate for gross brand compliance failures and brief alignment. Auto-retry up to 2 times on gross failures. Present advisory warnings for fine-grained issues.
 
 ## Step 5 — Review
 

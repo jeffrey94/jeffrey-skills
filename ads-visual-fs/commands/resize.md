@@ -71,6 +71,12 @@ Append the relevant platform constraints as an additional line in the recomposit
 prompt, e.g.: "Apply [platform] safe zones and text density limits: [key rules
 extracted from platform-rules.md]."
 
+### Prompt Transparency
+
+Before calling the generation script, display the full prompt for the **first platform only**. For subsequent platforms, display: "Same concept, adapted for [platform name] ([aspect ratio])."
+
+If the user says "don't show prompts" or "hide prompts", omit this for all platforms.
+
 For each selected platform, run the script via Bash with composition context:
 
 **Brand compliance**: Append the brand compliance prompt injection template from `brand-compliance/SKILL.md` to every generation prompt.
@@ -95,13 +101,13 @@ Process platforms sequentially to avoid rate limits.
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 
-**Error handling**:
-- Rate limit (429) or service unavailable (503): wait 5 seconds, retry once
-- Content policy violation: present the error, offer to modify the prompt
-- No image data returned: retry with simplified prompt
-- Other failures: log the error and continue with remaining platforms
+**Error handling**: Follow the error handling pattern in CLAUDE.md. For `/resize` specifically: if one platform fails, continue with remaining platforms and present partial results.
 
 See `brand-compliance/references/platform-rules.md` for detailed platform dimensions, safe zones, and layout guidance.
+
+## Step 3b — Quality Review
+
+After each image is generated, run the **quality self-review** from `quality-review/SKILL.md`. Read the generated image and evaluate for gross brand compliance failures and brief alignment. Auto-retry up to 2 times on gross failures. Present advisory warnings for fine-grained issues.
 
 ## Step 4 — Review
 
