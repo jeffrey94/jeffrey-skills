@@ -2,12 +2,14 @@
 name: reimagine
 description: Reimagine an existing ad with 3 concept variations (SAFE/BOLD/EXPERIMENTAL)
 argument-hint: <image-path>
-allowed-tools: Read, Bash
+allowed-tools: Read, Bash, AskUserQuestion
 ---
 
 # /reimagine
 
 Transform an existing ad creative into fresh concept variations at three conceptual levels.
+
+**Follow `ask-user-protocol/SKILL.md` for all user decision points.** Every AskUserQuestion call must use the 4-section format (Re-ground, Simplify, Recommend, Options).
 
 ## Step 1 — Analyze the Source Ad
 
@@ -29,49 +31,35 @@ Wait for user confirmation. Do NOT proceed until the user confirms.
 
 ## Step 1b — Platform & Visual Elements
 
-Ask the user:
+### Platform Selection
 
-> **What platform is this ad for?** (e.g., Instagram Feed, LinkedIn, TikTok)
+Use **Pattern A (Platform Selection)** from `ask-user-protocol/SKILL.md`.
 
-Then present each extracted copy element and the logo option individually. Ask the user to select which should appear in the generated visuals:
+Present a two-step AskUserQuestion:
+1. Platform category (Social Feed / Social Story / Display / Video)
+2. Specific platform within the selected category
 
-**Copy Elements:**
-- [ ] **H1 Headline**: "<extracted text>"
-- [ ] **Support Line**: "<extracted text>"
-- [ ] **CTA Label**: "<extracted text>"
-- [ ] **Trust Signals**: "<extracted text>"
-- [ ] **Regulatory Disclaimer**: "<extracted text>"
+### Visual Element Selection
 
-**Brand Elements:**
-- [ ] **FS Logo**: Include Funding Societies logo
+Then use **Pattern B (Visual Element Presets)** from `ask-user-protocol/SKILL.md`.
 
-> **Which elements should appear in the generated visuals? Select all that apply, or choose 'none' for visual-only output.**
+Present the AskUserQuestion with the 4-section format:
+- **Re-ground:** State we're reimagining the source ad, what was extracted, target platform.
+- **Simplify:** Explain on-visual vs. caption trade-off for the selected platform.
+- **Recommend:** Based on the target platform (see Pattern B recommendation table).
+- **Options:** Minimal / Standard (Recommended) / Full / Custom — with preview fields.
+
+If the user selects "Custom", follow up with the multiSelect AskUserQuestion defined in Pattern B.
+
+Wait for user selection.
+
+### Applying the selection
 
 When generating concept prompts in Step 2:
 - If copy elements are selected: include them with layout instructions ("Reserve appropriate visual space ONLY for the selected mandatory copy elements. Follow hierarchical order and ensure each element is legible.")
 - If no copy selected: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes."
 - Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
 - If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
-
-Wait for user selection.
-
-### Platform Recommendations
-
-After the user selects elements, read `brand-compliance/references/platform-rules.md`
-for the target platform and present recommendations:
-
-> **Recommended for [Platform Name]:**
-> Based on [platform] best practices, we recommend including only:
-> - ✅ Headline (max 5 words)
-> - ✅ CTA button
-> - ✅ FS Logo
-> - ✅ Regulatory disclaimer (small)
->
-> These elements are better in the **ad caption** (not on the visual):
-> - Support line
-> - Trust signals
->
-> You can override these recommendations using the checkboxes above.
 
 ## Step 2 — Generate 3 Concept Variations
 
@@ -92,9 +80,15 @@ For each concept, present:
 - **Image Generation Prompt** — Detailed prompt for Gemini (include FS brand colors: #F1F1F2, #FFDE0F, #5203EA, #27E4CD, #2C50FF; fonts: Poppins headings, Inter body)
 - **Settings** — image_strength value, aspect_ratio (auto-detected from source)
 
-Then ask:
+Then use **Pattern C (Concept Selection)** from `ask-user-protocol/SKILL.md`.
 
-> **Which concepts would you like me to generate? (1, 2, 3, or all)**
+Present with the 4-section format. Level names for `/reimagine`:
+- Level 1: **Safe (Reframe)** — Refined execution, close to original (~1 image, ~30s)
+- Level 2: **Bold (Transform)** — New metaphor, rebuilt composition (~1 image, ~30s)
+- Level 3: **Experimental (Transcend)** — Genre-shift, everything reimagined (~1 image, ~30s)
+- All Three (~3 images, ~2 min)
+
+Populate each option's `preview` field with the generated concept's title and first 2 sentences of rationale.
 
 Wait for user selection.
 
@@ -148,11 +142,12 @@ Add these to the negative prompts: `reference-ad-shown-as-object-in-scene, recur
 
 ## Step 4 — Review
 
-Present the output file paths. Then offer:
+Present the output file paths. Then use **Pattern D (Next Action)** from `ask-user-protocol/SKILL.md`.
 
+Options for `/reimagine`:
 - **Regenerate** — Try again with a modified prompt
-- **Refine** — Make targeted changes to a result (→ suggest `/refine`)
-- **Resize** — Adapt results for platforms (→ suggest `/resize`)
+- **Refine** — Make targeted changes to a result (-> `/refine`)
+- **Resize** — Adapt results for platforms (-> `/resize`)
 
 ## Step 4b — Ad Caption Copy
 

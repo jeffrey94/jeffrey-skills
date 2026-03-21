@@ -2,12 +2,14 @@
 name: refine
 description: Refine specific elements of an ad while preserving the rest
 argument-hint: <image-path> [changes]
-allowed-tools: Read, Bash
+allowed-tools: Read, Bash, AskUserQuestion
 ---
 
 # /refine
 
 Make targeted changes to specific elements of an existing ad creative while preserving everything else.
+
+**Follow `ask-user-protocol/SKILL.md` for all user decision points.** Every AskUserQuestion call must use the 4-section format (Re-ground, Simplify, Recommend, Options).
 
 ## Step 1 — Collect Intent
 
@@ -81,7 +83,8 @@ Repeat for v2 and v3 with slight prompt variations.
 
 ## Step 5 — Review
 
-Present the output paths. Offer:
+Present the output paths. Then use **Pattern D (Next Action)** from `ask-user-protocol/SKILL.md`.
 
-- **Further refine** — Apply additional changes
-- **Resize** — Adapt for platforms (→ suggest `/resize`)
+Options for `/refine`:
+- **Further Refine** — Apply additional changes
+- **Resize** — Adapt for platforms (-> `/resize`)

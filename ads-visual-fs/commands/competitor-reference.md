@@ -2,26 +2,42 @@
 name: competitor-reference
 description: Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies
 argument-hint: <competitor-image-path>
-allowed-tools: Read, Bash
+allowed-tools: Read, Bash, AskUserQuestion
 ---
 
 # /competitor-reference
 
 Analyze a competitor ad for transferable creative strategies, then generate production-ready FS-branded ads inspired by those strategies.
 
+**Follow `ask-user-protocol/SKILL.md` for all user decision points.** Every AskUserQuestion call must use the 4-section format (Re-ground, Simplify, Recommend, Options).
+
 ## Step 1 — Intake
 
 Read the competitor image at `$1`. You are multimodal — analyze it directly.
 
-Ask the user:
+Collect details in two rounds:
 
-> **Before I analyze this competitor ad, I need a few details:**
->
-> 1. **Target platform** — Where will the FS ad run? (e.g., Instagram Feed, LinkedIn, TikTok)
-> 2. **FS product/campaign** — What FS product or campaign is this for? (e.g., SME Business Loan MY, Invoice Financing SG)
-> 3. **Target market** — Which market? (SG, MY, ID, TH, VN)
+### Round 1 — Structured choices (batched AskUserQuestion)
 
-Wait for user answers before proceeding.
+Use AskUserQuestion with 2 questions in a single call:
+
+**Question 1 — Platform Category:**
+- header: "Platform"
+- Use Pattern A Step 1 from ask-user-protocol (Social Feed / Social Story / Display / Video)
+
+**Question 2 — Target Market:**
+- header: "Market"
+- options: Singapore / Malaysia / Indonesia / Thailand (VN and others via auto "Other")
+- Each option description includes the regulatory entity
+
+Then use a follow-up AskUserQuestion for the **specific platform** within the selected category (Pattern A Step 2). If the category has only 1 platform, auto-select it.
+
+### Round 2 — Free-text input
+
+After structured choices, prompt the user for:
+- **FS product/campaign** — What FS product or campaign is this for? (e.g., SME Business Loan MY, Invoice Financing SG)
+
+Wait for all answers before proceeding.
 
 ## Step 2 — Competitor Analysis
 
@@ -64,44 +80,25 @@ Wait for user to finalize copy. Do NOT proceed until the user confirms their cop
 
 ## Step 3b — Element Selection
 
-After copy is confirmed, present checkboxes for which elements appear in the generated visuals:
+After copy is confirmed, use **Pattern B (Visual Element Presets)** from `ask-user-protocol/SKILL.md`.
 
-**Copy Elements:**
-- [ ] **H1 Headline**: "[confirmed headline]"
-- [ ] **Support Line**: "[confirmed support line]"
-- [ ] **CTA Label**: "[confirmed CTA]"
-- [ ] **Regulatory Disclaimer**: "[confirmed disclaimer]"
-- [ ] **Trust Signals**: "[any trust signals from the confirmed copy, e.g., '100,000+ SMEs funded']"
+Present the AskUserQuestion with the 4-section format:
+- **Re-ground:** State we're creating an FS ad inspired by the competitor, confirmed copy summary, target platform.
+- **Simplify:** Explain what "on visual vs. in caption" means for ad performance. Reference platform-rules.md.
+- **Recommend:** Based on the target platform (see Pattern B recommendation table in ask-user-protocol).
+- **Options:** Minimal / Standard (Recommended) / Full / Custom — with preview fields showing element breakdowns.
 
-**Brand Elements:**
-- [ ] **FS Logo**: Include Funding Societies logo
+If the user selects "Custom", follow up with the multiSelect AskUserQuestion defined in Pattern B.
 
-> **Which elements should appear in the generated visuals? Select all that apply, or choose 'none' for visual-only output.**
+Wait for user selection.
+
+### Applying the selection
 
 When generating concept prompts in Step 4:
 - If copy elements are selected: include them with layout instructions ("Reserve appropriate visual space ONLY for the selected mandatory copy elements. Follow hierarchical order and ensure each element is legible.")
 - If no copy selected: include "No mandatory copy required. Focus on visual composition, product showcase, and brand codes."
 - Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
 - If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
-
-Wait for user selection.
-
-### Platform Recommendations
-
-After the user selects elements, read `brand-compliance/references/platform-rules.md` for the target platform and present recommendations:
-
-> **Recommended for [Platform Name]:**
-> Based on [platform] best practices, we recommend including only:
-> - ✅ Headline (max 5 words)
-> - ✅ CTA button
-> - ✅ FS Logo
-> - ✅ Regulatory disclaimer (small)
->
-> These elements are better in the **ad caption** (not on the visual):
-> - Support line
-> - Trust signals
->
-> You can override these recommendations using the checkboxes above.
 
 ## Step 4 — Generate 3 Concept Variations
 
@@ -132,9 +129,15 @@ For each concept, present:
   - Brand compliance prompt injection (from brand-compliance skill)
 - **Settings** — image_strength value, aspect_ratio from target platform
 
-Then ask:
+Then use **Pattern C (Concept Selection)** from `ask-user-protocol/SKILL.md`.
 
-> **Which concepts would you like me to generate? (1, 2, 3, or all)**
+Present with the 4-section format. Level names for `/competitor-reference`:
+- Level 1: **Direct Adaptation** — Closely follows competitor DNA (~1 image, ~30s)
+- Level 2: **Blended** — ~50% competitor, ~50% FS (~1 image, ~30s)
+- Level 3: **Creative Riff** — Competitor influence felt, not seen (~1 image, ~30s)
+- All Three (~3 images, ~2 min)
+
+Populate each option's `preview` field with the generated concept's title, rationale, and what it borrows from the competitor.
 
 Wait for user selection.
 
@@ -206,11 +209,12 @@ Do not render body copy, bullet points, or detailed offer text on the image.
 
 ## Step 6 — Review
 
-Present the output file paths. Then offer:
+Present the output file paths. Then use **Pattern D (Next Action)** from `ask-user-protocol/SKILL.md`.
 
+Options for `/competitor-reference`:
 - **Regenerate** — Try again with a modified prompt
-- **Refine** — Make targeted changes to a result (suggest `/refine`)
-- **Resize** — Adapt results for other platforms (suggest `/resize`)
+- **Refine** — Make targeted changes to a result (-> `/refine`)
+- **Resize** — Adapt results for other platforms (-> `/resize`)
 
 ### Ad Caption Copy
 

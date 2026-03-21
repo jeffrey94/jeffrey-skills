@@ -2,12 +2,14 @@
 name: resize
 description: Adapt an ad for different platform formats
 argument-hint: <image-path> [platforms]
-allowed-tools: Read, Bash
+allowed-tools: Read, Bash, AskUserQuestion
 ---
 
 # /resize
 
 Adapt an ad creative for different platform formats with composition-aware recomposition.
+
+**Follow `ask-user-protocol/SKILL.md` for all user decision points.** Every AskUserQuestion call must use the 4-section format (Re-ground, Simplify, Recommend, Options).
 
 ## Step 1 — Analyze Source
 
@@ -29,24 +31,19 @@ Determine:
 
 If `$2` is provided, parse platform names from it (e.g., "instagram linkedin tiktok").
 
-Otherwise, present the platform menu and ask the user to select:
+Otherwise, use **Pattern A (Platform Selection)** from `ask-user-protocol/SKILL.md` with `multiSelect: true` on both steps.
 
-**Social Media:**
-- [ ] Instagram Feed (1:1)
-- [ ] Instagram Story/Reel (9:16)
-- [ ] Facebook Feed (4:3)
-- [ ] Facebook Story (9:16)
-- [ ] LinkedIn Feed (4:3)
-- [ ] LinkedIn Story (9:16)
-- [ ] TikTok (9:16)
+**Step A — Category selection (multiSelect):**
 
-**Display & Video:**
-- [ ] YouTube Thumbnail (16:9)
-- [ ] Google Display Leaderboard (16:9)
-- [ ] Google Display Rectangle (4:3)
-- [ ] Google Display Skyscraper (9:16)
+Present with the 4-section format:
+- **Re-ground:** State we're resizing the analyzed ad for multiple platforms.
+- **Simplify:** Explain that different platforms need different canvas shapes, and the ad will be intelligently recomposed (not just cropped) for each.
+- **Recommend:** Based on the source ad's format, suggest categories that require the least recomposition (e.g., if source is 1:1, recommend Social Feed first).
+- **Options:** Social Feed / Social Story / Display / Video — with `multiSelect: true`.
 
-> **Select platforms (comma-separated numbers or names):**
+**Step B — Specific platforms within each selected category (multiSelect):**
+
+Batch the sub-selects into a single AskUserQuestion call (up to 4 questions, one per selected category). If a category has only 1 platform (Video -> YouTube), auto-include it.
 
 Wait for selection.
 
@@ -118,6 +115,8 @@ List all generated files with their platform specs:
 |----------|-----------|--------------|-------------|
 | ... | ... | ... | ... |
 
-Offer:
+Then use **Pattern D (Next Action)** from `ask-user-protocol/SKILL.md`.
+
+Options for `/resize`:
 - **Regenerate** — Retry specific platforms
-- **Refine** — Make targeted changes to a specific platform version (→ suggest `/refine`)
+- **Refine** — Make targeted changes to a specific platform version (-> `/refine`)
