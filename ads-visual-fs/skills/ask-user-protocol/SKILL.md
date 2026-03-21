@@ -10,57 +10,41 @@ Automatically during ANY command workflow when a user decision is needed. Do NOT
 
 ## The 4-Section Format
 
-**ALWAYS output this text block before every AskUserQuestion tool call:**
+Before every AskUserQuestion call, write a short conversational paragraph that naturally covers these 4 points. Do NOT use section labels or protocol headers — write as if you're talking to a marketing manager.
 
-### 1. Re-ground
-State the command being run, the campaign/ad context accumulated so far, and what step we're at. Keep it to 1-2 sentences. This prevents "wait, what are we doing?" drift.
+### What to cover (internal checklist — do NOT show these labels to the user):
 
-### 2. Simplify
-Explain the decision in plain English a marketing manager would understand. No prompt engineering jargon, no internal parameter names. Say what each choice **does for the ad**, not what it's called internally. Use concrete examples and analogies.
+1. **Context** (orients the user): Open with 1 sentence stating what command we're running, for what campaign, and what step we're at. This keeps the user oriented if they've stepped away.
 
-### 3. Recommend
-Format: `RECOMMENDATION: Choose [X] because [one-line reason tied to campaign goal or platform best practice].`
+2. **Explanation** (why this choice matters): In 1-2 sentences, explain why this decision matters for the ad. Use plain language — what each choice does for performance, reach, or brand compliance. No prompt engineering jargon, no internal parameter names.
 
-Always tie the recommendation to something concrete:
-- Platform best practices (reference `brand-compliance/references/platform-rules.md`)
-- Campaign goal alignment (awareness → different choice than lead gen)
-- Industry norms for the target market
+3. **Suggestion** (your recommendation): State your pick with a reason tied to the campaign goal or platform best practice. Use natural phrasing like "I'd suggest X because..." or "X works best here because...". Always tie it to something concrete:
+   - Platform best practices (reference `brand-compliance/references/platform-rules.md`)
+   - Campaign goal alignment (awareness → different choice than lead gen)
+   - Industry norms for the target market
 
-### 4. Options
-Lettered options: `A) ... B) ... C) ...`
+4. **Cost context** (when relevant): When options involve image generation, mention the time/count naturally in the text: "This generates 3 images and takes about 2 minutes." Do NOT use formatted estimates like `(~3 images, ~2 min)`.
 
-When an option triggers image generation, show the cost:
-- Single concept: `(~1 image, ~30s)`
-- All concepts: `(~3 images, ~2 min)`
-- Multi-platform resize: `(~N images, ~N min)`
-
-Then immediately call the AskUserQuestion tool with matching options.
+Then call AskUserQuestion. The tool's structured UI handles the actual option presentation — do NOT list lettered options (A/B/C/D) in the text output.
 
 ---
 
 ## Example (from /create, Step 2b)
 
 ```
-**Re-ground:** We're creating an Instagram Feed ad for SME Business Loan SG.
-Copy is confirmed: "Fund Growth Fast" / "Apply Now". Now choosing what text
-goes on the image itself vs. the caption.
+We're creating an Instagram Feed ad for SME Business Loan SG — copy is
+confirmed, now choosing what text goes on the image itself versus the caption.
 
-**Simplify:** Instagram penalizes ads with too much text on the image — fewer
-people see it and it costs more per impression. Putting details in the caption
-keeps the visual clean and lets the algorithm show your ad to more people.
+Instagram's algorithm deprioritizes ads with too much text on the image,
+so keeping the visual clean means more people see it and it costs less
+per impression. Details like trust signals and support lines work better
+in the caption.
 
-**Recommend:** RECOMMENDATION: Choose B) Standard because it balances brand
-presence (logo + disclaimer) with a clean layout, matching Instagram's
-< 20% text guideline.
-
-**Options:**
-A) Minimal — headline + CTA only (cleanest visual)
-B) Standard — headline + CTA + logo + disclaimer (recommended balance)
-C) Full — all elements on the image (best for LinkedIn or print)
-D) Custom — I'll pick specific elements
+I'd suggest Standard — headline, CTA, logo, and disclaimer gives you
+brand presence without triggering text-heavy penalties on Instagram.
 ```
 
-Then call AskUserQuestion with these 4 options.
+Then call AskUserQuestion with the preset options.
 
 ---
 
@@ -81,11 +65,11 @@ Use AskUserQuestion with these options:
 | Display Ads | DISPLAY | Google Leaderboard (16:9), Rectangle (4:3), Skyscraper (9:16) |
 | Video | VIDEO | YouTube Thumbnail (16:9) |
 
-For the **Recommend** section, reference the campaign goal:
-- Awareness campaigns → Social Feed or Social Story (broadest reach)
-- Lead gen → LinkedIn Feed or Social Feed (conversion-optimized)
-- Retargeting → Display Ads (follows users across sites)
-- Product launch → Social Story or Video (highest engagement)
+For your **suggestion**, reference the campaign goal:
+- Awareness campaigns → suggest Social Feed or Social Story (broadest reach)
+- Lead gen → suggest LinkedIn Feed or Social Feed (conversion-optimized)
+- Retargeting → suggest Display Ads (follows users across sites)
+- Product launch → suggest Social Story or Video (highest engagement)
 
 **Step 2 — Specific platform within category:**
 
@@ -131,13 +115,13 @@ Use AskUserQuestion with `preview` fields showing element breakdowns:
 | Full | FULL | All copy and brand elements on visual | `ON VISUAL:\n  Headline\n  Support line\n  CTA button\n  Trust signals\n  Regulatory disclaimer\n  FS Logo` |
 | Custom | CUSTOM | I'll pick specific elements | `You'll select from:\n  Headline + CTA (core copy)\n  FS Logo (brand)\n  Trust + Disclaimer (legal)\n  Support Line (detail)` |
 
-**For the Recommend section**, reference `brand-compliance/references/platform-rules.md`:
-- Meta (IG/FB): Recommend **Standard** — < 20% text rule, algorithmically penalizes text-heavy ads
-- LinkedIn: Recommend **Full** or **Standard** — more text-tolerant, stats perform well
-- TikTok: Recommend **Minimal** — visual-first, minimal text outperforms
-- Google Display Leaderboard: Recommend **Minimal** — extremely compact, no room for more
-- Google Display Rectangle/Skyscraper: Recommend **Standard**
-- YouTube: Recommend **Minimal** — bold headline must read at thumbnail size
+**For your suggestion**, reference `brand-compliance/references/platform-rules.md`:
+- Meta (IG/FB): suggest **Standard** — < 20% text rule, algorithmically penalizes text-heavy ads
+- LinkedIn: suggest **Full** or **Standard** — more text-tolerant, stats perform well
+- TikTok: suggest **Minimal** — visual-first, minimal text outperforms
+- Google Display Leaderboard: suggest **Minimal** — extremely compact, no room for more
+- Google Display Rectangle/Skyscraper: suggest **Standard**
+- YouTube: suggest **Minimal** — bold headline must read at thumbnail size
 
 **If "Custom" is selected**, follow up with a multiSelect AskUserQuestion:
 
@@ -166,15 +150,13 @@ Present after generating concepts. Use AskUserQuestion with `preview` fields pop
 - `/reimagine`: Safe (Reframe) / Bold (Transform) / Experimental (Transcend)
 - `/competitor-reference`: Direct Adaptation / Blended / Creative Riff
 
-**For the Recommend section**, reference the campaign context:
-- First campaign or exploring: Recommend **All Three** — gives options to compare
-- Iterating on a proven concept: Recommend **Level 1** (Safe) — refine what works
-- Campaign refresh or fatigue: Recommend **Level 2** (Bold) — new angle, controlled risk
-- Brand campaign with creative freedom: Recommend **Level 3** (Experimental)
+**For your suggestion**, reference the campaign context:
+- First campaign or exploring: suggest **All Three** — gives options to compare
+- Iterating on a proven concept: suggest **Level 1** (Safe) — refine what works
+- Campaign refresh or fatigue: suggest **Level 2** (Bold) — new angle, controlled risk
+- Brand campaign with creative freedom: suggest **Level 3** (Experimental)
 
-Generation time estimates per option:
-- Single concept: `(~1 image, ~30s)`
-- All Three: `(~3 images, ~2 min)`
+Mention generation time naturally in the text (e.g., "Generating one concept takes about 30 seconds. All three takes about 2 minutes.").
 
 ---
 
@@ -191,12 +173,12 @@ Present after image generation completes. Options vary per command — each comm
 | Resize | ADAPT | Adapt for additional platforms -> /resize |
 | Further Refine | REFINE | Apply additional changes to this ad |
 
-**For the Re-ground section:** Summarize what was generated (how many images, which concepts, output paths).
+**For context:** Summarize what was generated (how many images, which concepts, output paths).
 
-**For the Recommend section:** Suggest the most logical next step:
-- If one concept is close but needs tweaks → Recommend **Refine**
-- If the user has a winner and needs it on other platforms → Recommend **Resize**
-- If none of the concepts hit the mark → Recommend **Regenerate**
+**For your suggestion:** Recommend the most logical next step:
+- If one concept is close but needs tweaks → suggest **Refine**
+- If the user has a winner and needs it on other platforms → suggest **Resize**
+- If none of the concepts hit the mark → suggest **Regenerate**
 
 ---
 

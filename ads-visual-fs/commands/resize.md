@@ -35,11 +35,7 @@ Otherwise, use **Pattern A (Platform Selection)** from `ask-user-protocol/SKILL.
 
 **Step A — Category selection (multiSelect):**
 
-Present with the 4-section format:
-- **Re-ground:** State we're resizing the analyzed ad for multiple platforms.
-- **Simplify:** Explain that different platforms need different canvas shapes, and the ad will be intelligently recomposed (not just cropped) for each.
-- **Recommend:** Based on the source ad's format, suggest categories that require the least recomposition (e.g., if source is 1:1, recommend Social Feed first).
-- **Options:** Social Feed / Social Story / Display / Video — with `multiSelect: true`.
+Present with a conversational intro covering: what step we're at (resizing for multiple platforms), explaining that each platform gets an intelligent recomposition (not just a crop), and your suggestion based on the source ad's format (e.g., if source is 1:1, suggest Social Feed first). Then call AskUserQuestion with Social Feed / Social Story / Display / Video options with `multiSelect: true`.
 
 **Step B — Specific platforms within each selected category (multiSelect):**
 

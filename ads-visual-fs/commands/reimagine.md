@@ -43,11 +43,7 @@ Present a two-step AskUserQuestion:
 
 Then use **Pattern B (Visual Element Presets)** from `ask-user-protocol/SKILL.md`.
 
-Present the AskUserQuestion with the 4-section format:
-- **Re-ground:** State we're reimagining the source ad, what was extracted, target platform.
-- **Simplify:** Explain on-visual vs. caption trade-off for the selected platform.
-- **Recommend:** Based on the target platform (see Pattern B recommendation table).
-- **Options:** Minimal / Standard (Recommended) / Full / Custom — with preview fields.
+Present with a conversational intro covering: what step we're at (reimagining the source ad), why "on visual vs. caption" matters for the selected platform, and your suggestion based on the target platform (see Pattern B in ask-user-protocol). Then call AskUserQuestion with Minimal / Standard (Recommended) / Full / Custom options with preview fields.
 
 If the user selects "Custom", follow up with the multiSelect AskUserQuestion defined in Pattern B.
 

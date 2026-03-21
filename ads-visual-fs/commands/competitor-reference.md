@@ -82,11 +82,7 @@ Wait for user to finalize copy. Do NOT proceed until the user confirms their cop
 
 After copy is confirmed, use **Pattern B (Visual Element Presets)** from `ask-user-protocol/SKILL.md`.
 
-Present the AskUserQuestion with the 4-section format:
-- **Re-ground:** State we're creating an FS ad inspired by the competitor, confirmed copy summary, target platform.
-- **Simplify:** Explain what "on visual vs. in caption" means for ad performance. Reference platform-rules.md.
-- **Recommend:** Based on the target platform (see Pattern B recommendation table in ask-user-protocol).
-- **Options:** Minimal / Standard (Recommended) / Full / Custom — with preview fields showing element breakdowns.
+Present with a conversational intro covering: what step we're at (creating FS ad inspired by competitor), why "on visual vs. caption" matters for ad performance (reference platform-rules.md), and your suggestion based on the target platform (see Pattern B in ask-user-protocol). Then call AskUserQuestion with Minimal / Standard (Recommended) / Full / Custom options with preview fields.
 
 If the user selects "Custom", follow up with the multiSelect AskUserQuestion defined in Pattern B.
 
