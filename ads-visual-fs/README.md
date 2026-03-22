@@ -2,6 +2,20 @@
 
 AI-powered ad creative generation plugin for Funding Societies. Create ads from briefs, reimagine existing creatives, refine elements, resize for platforms, generate full campaign sets, and run A/B variants — all with FS brand compliance and automated quality review built in.
 
+## Sample Output
+
+### `/create` — SME Business Loan SG
+
+| Safe | Experimental |
+|------|-------------|
+| ![Safe concept](docs/samples/create-safe.png) | ![Experimental concept](docs/samples/create-experimental.png) |
+
+### `/competitor-reference` — Alliance Bank MY
+
+| Direct Adaptation | Creative Riff |
+|-------------------|--------------|
+| ![Direct adaptation](docs/samples/competitor-direct.png) | ![Creative riff](docs/samples/competitor-riff.png) |
+
 ## Architecture
 
 ### Plugin Structure
