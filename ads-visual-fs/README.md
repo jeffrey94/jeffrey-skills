@@ -4,11 +4,11 @@ AI-powered ad creative generation plugin for Funding Societies. Create ads from 
 
 ## Sample Output
 
-### `/create` — SME Business Loan SG
+### `/create` — SME Business Loan MY
 
-| Safe | Experimental |
-|------|-------------|
-| ![Safe concept](docs/samples/create-safe.png) | ![Experimental concept](docs/samples/create-experimental.png) |
+| Feed (4:3) | Story (9:16) |
+|------------|-------------|
+| ![Feed ad](docs/samples/create-feed.png) | ![Story ad](docs/samples/create-story.png) |
 
 ### `/competitor-reference` — Alliance Bank MY
 
