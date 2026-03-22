@@ -35,13 +35,18 @@ When strategy is clear and it's time to produce visuals, use the ads-visual-fs p
 
 | Command | When to use |
 |---------|------------|
-| `/create [brief.pdf] [brand-guide] [logo]` | Generate new ads from a marketing brief |
-| `/reimagine <image>` | Transform an existing ad into 3 concept variations |
-| `/competitor-reference <image>` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
+| `/create [brief.pdf] [brand-guide] [logo] [--variants N]` | Generate new ads from a marketing brief |
+| `/campaign [brief.pdf] [brand-guide] [logo] [--variants N]` | Generate a full campaign set across multiple platforms from a single brief |
+| `/reimagine <image> [--variants N]` | Transform an existing ad into 3 concept variations |
+| `/competitor-reference <image> [--variants N]` | Analyze a competitor ad and generate FS-branded ads inspired by its creative strategies |
 | `/refine <image> [changes]` | Make targeted edits to an ad while preserving the rest |
 | `/resize <image> [platforms]` | Adapt an ad for different platform formats |
 
 Don't reach for visual generation until the strategy conversation is complete. The sequence is: objective → audience → message → creative brief → visuals.
+
+Use `/campaign` when the user needs ads across multiple platforms — it collects the brief once and generates consistently styled creatives for every selected platform. Use `/create` for single-platform work or early exploration.
+
+Use `--variants N` (2-4) when the user wants A/B test options — each variant changes one thing (CTA text, colorway, or headline emphasis) while keeping the concept identical.
 
 ### Workflow Pattern
 
@@ -52,7 +57,8 @@ Every command follows the same flow. Guide the user through each step and wait f
 3. **Confirm** — Present analysis for user review (do NOT proceed without confirmation)
 4. **Select** — Choose visual elements and concept levels
 5. **Generate** — Create images via Gemini API
-6. **Review** — Present results, offer next steps (Regenerate / Refine / Resize)
+6. **QA** — Auto-review each image for brand compliance; retry on gross failures
+7. **Review** — Present results, offer next steps (Regenerate / Refine / Resize)
 
 ### Three Concept Levels
 
@@ -112,6 +118,7 @@ Platform choice affects what elements can appear on the visual:
 ## File Organization
 
 - Input materials (briefs, branding guides, reference images, segment docs): `./input/`
-- Generated output: `./ads-output/{create,reimagine,competitor-reference,refine,resize}/`
+- Generated output: `./ads-output/{create,reimagine,competitor-reference,refine,resize,campaign}/`
+- Generation history: `./ads-output/generation-log.jsonl`
 
 Always check `./input/` first when starting a new conversation — it may contain branding guidelines, target segment documents, or style references that inform the strategy.
