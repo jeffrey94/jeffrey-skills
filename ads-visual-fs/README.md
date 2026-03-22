@@ -1,6 +1,6 @@
 # ads-visual-fs
 
-AI-powered ad creative generation plugin for Funding Societies. Reimagine existing ads, refine elements, resize for platforms, and create from briefs — all with FS brand compliance built in.
+AI-powered ad creative generation plugin for Funding Societies. Create ads from briefs, reimagine existing creatives, refine elements, resize for platforms, generate full campaign sets, and run A/B variants — all with FS brand compliance and automated quality review built in.
 
 ## Architecture
 
@@ -12,7 +12,7 @@ ads-visual-fs/
 ├── .claude-plugin/
 │   └── plugin.json (v0.9.0)
 │
-├── CLAUDE.md                          Shared error handling pattern
+├── CLAUDE.md                          Agent persona, workflow guide, error handling
 │
 ├── commands/                          ┌─────────────────────────────┐
 │   ├── create.md ─────────────────────┤  All commands reference:    │
@@ -20,7 +20,7 @@ ads-visual-fs/
 │   ├── competitor-reference.md ───────┤  • brand-compliance skill   │
 │   ├── refine.md ─────────────────────┤  • quality-review skill     │
 │   ├── resize.md ─────────────────────┤  • generate-image.ts script │
-│   └── campaign.md (NEW) ────────────┤                             │
+│   └── campaign.md ──────────────────┤                             │
 │                                      └─────────────────────────────┘
 ├── skills/
 │   ├── ask-user-protocol/             Shared UX protocol
@@ -56,8 +56,7 @@ ads-visual-fs/
 │   │   └── references/
 │   │       └── analysis-dimensions.md
 │   │
-│   └── quality-review/ (NEW)
-│       └── SKILL.md                   Post-generation QA (brand compliance check)
+│   └── quality-review/ │       └── SKILL.md                   Post-generation QA (brand compliance check)
 │
 ├── scripts/
 │   ├── generate-image.ts              Gemini API caller + JSONL logging (bun)
@@ -73,8 +72,7 @@ ads-visual-fs/
     ├── reimagine/
     ├── refine/
     ├── resize/
-    ├── campaign/ (NEW)
-    └── competitor-reference/
+    ├── campaign/     └── competitor-reference/
 ```
 
 ### Data Flow
@@ -259,8 +257,9 @@ The more context you provide in `./input/`, the less back-and-forth is needed an
 ### Tips
 
 - **Strategy before visuals** — Start by discussing the campaign objective and audience. Use `/create` only after the brief is clear.
-- **Right command for the job** — `/reimagine` for fresh concepts from an existing ad, `/refine` for surgical edits, `/resize` for platform adaptation.
-- **Iterate in sequence** — A typical flow: `/create` → pick the best → `/refine` to polish → `/resize` for all platforms.
+- **Right command for the job** — `/campaign` for multi-platform sets, `/create` for single-platform exploration, `/reimagine` for fresh concepts from an existing ad, `/refine` for surgical edits, `/resize` for platform adaptation.
+- **Iterate in sequence** — A typical flow: `/create` → pick the best → `/refine` to polish → `/resize` for all platforms. Or: `/campaign` to do it all in one go.
+- **A/B test with variants** — Add `--variants 3` to generate variations with different CTAs, colorways, or headline emphasis. Great for testing what resonates.
 - **Provide style references** — A single reference image can dramatically improve visual consistency across generated ads.
 - **Review the analysis step** — Each command presents its analysis for confirmation. Correct any misinterpretations before generation.
 
@@ -269,22 +268,27 @@ The more context you provide in `./input/`, the less back-and-forth is needed an
 ### Commands
 
 ```
+/create
+/create --variants 3
+/campaign
+/campaign --variants 2
 /reimagine ./path/to/ad.png
+/reimagine ./path/to/ad.png --variants 3
 /refine ./path/to/ad.png make CTA more urgent
 /resize ./path/to/ad.png instagram linkedin tiktok
-/create
 /competitor-reference ./path/to/competitor-ad.png
 ```
 
 ### Natural Language
 
 ```
+"Create an ad for our SME loan targeting Singapore"
+"Create a full campaign for SME loans across Instagram, LinkedIn, and TikTok"
 "Reimagine this ad with fresh variations" (attach image)
+"Give me 3 A/B variants of this ad" (attach image)
 "Change the headline to '48-Hour Funding'" (attach image)
 "Resize this for Instagram and LinkedIn" (attach image)
-"Create an ad for our SME loan targeting Singapore"
 "I love this competitor ad, can we do something similar for FS?" (attach competitor image)
-"Analyze this Alliance Bank ad and create FS versions" (attach image)
 ```
 
 ## Output
@@ -293,7 +297,9 @@ Generated images are saved to `./ads-output/` organized by workflow:
 
 ```
 ads-output/
-├── create/<campaign-name>/
+├── generation-log.jsonl                              Generation history
+├── create/<campaign-name>/<level>.png
+├── campaign/<campaign-slug>/<platform>.png
 ├── reimagine/<concept-title>.png
 ├── refine/<description>-v{1,2,3}.png
 ├── resize/<platform>.png
