@@ -42,6 +42,19 @@ This skill provides domain expertise when you need to generate creative concepts
 - **Image Strength**: 0.20–0.40 (loose reference, prompt-driven transformation)
 - **Risk**: High — but potential for breakthrough creative
 
+## Style Preset Integration
+
+When a style preset is selected (from `style-presets/SKILL.md`), it becomes the PRIMARY visual direction for all concept levels. The preset defines required elements, composition structure, framing devices, subject treatment, reference layout, and mood.
+
+**Colors are NOT fixed by the style preset.** Choose the best color combination from the FS brand palette based on campaign context (product, market, platform). The existing warm/cool colorway system continues to apply.
+
+**How presets interact with concept levels:**
+- **SAFE**: Follows the preset literally — same elements, same layout, same mood. Only copy approach varies.
+- **BOLD**: Keeps the preset's required elements and mood but introduces a new visual metaphor or storytelling angle within that style system.
+- **EXPERIMENTAL**: Keeps the preset's required elements but allows composition and layout to diverge. Mood is preserved as a starting point.
+
+**Before generating concepts**, read the reference image for the selected style (bundled in `style-presets/references/`). The Prompt Injection Fragment from the style (in `style-presets/references/style-directory.md`) MUST be included in every image generation prompt, placed BEFORE the scene description.
+
 ## Concept Output Format
 
 For each concept, produce:
@@ -53,6 +66,7 @@ For each concept, produce:
    - FS brand colors to use (#F1F1F2, #FFDE0F, #5203EA, #27E4CD, #2C50FF)
    - Typography direction (Poppins headings, Inter body)
    - Copy elements to include (headline, CTA, trust signals)
+   - Style preset injection (from `style-presets/references/style-directory.md` — the selected preset's Prompt Injection Fragment)
    - Style and mood direction
    - Negative prompts (no gambling, casino, rockets, memes, illegible text)
 4. **Settings** — image_strength matching the concept level (SAFE: 0.85–0.95, BOLD: 0.55–0.70, EXPERIMENTAL: 0.20–0.40), and aspect_ratio from the source image or target platform. The `--strength` parameter controls how closely the output follows the reference (1=exact copy, 0=ignore reference). Higher strength = closer to reference. SAFE stays close, EXPERIMENTAL diverges most. For Create (text-to-image, no reference), image_strength is not applicable.

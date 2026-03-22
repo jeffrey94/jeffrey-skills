@@ -16,6 +16,18 @@ AI-powered ad creative generation plugin for Funding Societies. Create ads from 
 |-------------------|--------------|
 | ![Direct adaptation](docs/samples/competitor-direct.png) | ![Creative riff](docs/samples/competitor-riff.png) |
 
+### Style Presets
+
+4 predefined visual styles for `/create` and `/campaign`. Each defines required elements, composition, and mood — colors stay flexible from the FS brand palette.
+
+| Warm Showcase | Bold Professional |
+|---------------|-------------------|
+| ![Warm Showcase](docs/samples/style-1-warm-showcase.jpg) | ![Bold Professional](docs/samples/style-2-bold-professional.png) |
+
+| Tech Forward | Aspirational Shadow |
+|--------------|---------------------|
+| ![Tech Forward](docs/samples/style-3-tech-forward.png) | ![Aspirational Shadow](docs/samples/style-4-aspirational-shadow.png) |
+
 ## Architecture
 
 ### Plugin Structure
@@ -24,7 +36,7 @@ AI-powered ad creative generation plugin for Funding Societies. Create ads from 
 ads-visual-fs/
 │
 ├── .claude-plugin/
-│   └── plugin.json (v0.9.0)
+│   └── plugin.json (v0.9.1)
 │
 ├── CLAUDE.md                          Agent persona, workflow guide, error handling
 │
@@ -70,7 +82,17 @@ ads-visual-fs/
 │   │   └── references/
 │   │       └── analysis-dimensions.md
 │   │
-│   └── quality-review/ │       └── SKILL.md                   Post-generation QA (brand compliance check)
+│   ├── quality-review/
+│   │   └── SKILL.md                   Post-generation QA (brand compliance check)
+│   │
+│   └── style-presets/
+│       ├── SKILL.md                   4 visual style presets for /create and /campaign
+│       └── references/
+│           ├── style-directory.md     Full style definitions + prompt fragments
+│           ├── style-1-warm-showcase.jpg
+│           ├── style-2-bold-professional.png
+│           ├── style-3-tech-forward.png
+│           └── style-4-aspirational-shadow.png
 │
 ├── scripts/
 │   ├── generate-image.ts              Gemini API caller + JSONL logging (bun)
@@ -129,15 +151,15 @@ User Input
 ### Skill Usage Matrix
 
 ```
-                brand    concept   composition  marketing  competitor  ask-user  quality
-                comply   gen       analysis     analysis   analysis    protocol  review
-─────────────── ──────── ───────── ──────────── ────────── ────────── ───────── ────────
-/create           ✓        ✓                                             ✓        ✓
+                brand    concept   composition  marketing  competitor  ask-user  quality  style
+                comply   gen       analysis     analysis   analysis    protocol  review   presets
+─────────────── ──────── ───────── ──────────── ────────── ────────── ───────── ──────── ───────
+/create           ✓        ✓                                             ✓        ✓       ✓
 /reimagine        ✓        ✓                       ✓                     ✓        ✓
 /competitor-ref   ✓        ✓                                  ✓          ✓        ✓
 /refine           ✓                    ✓                                 ✓        ✓
 /resize           ✓                    ✓                                 ✓        ✓
-/campaign         ✓        ✓                                             ✓        ✓
+/campaign         ✓        ✓                                             ✓        ✓       ✓
 ```
 
 ## Components
@@ -165,7 +187,7 @@ Auto-trigger on natural language — same orchestration as commands.
 | create | "create an ad for", "design a new ad", "make marketing visuals" |
 | competitor-reference | "analyze this competitor ad", "do something like this competitor ad", "inspired by this ad" |
 
-### Shared Skills (6)
+### Shared Skills (7)
 
 Context-activated domain expertise — auto-activates during workflows.
 
@@ -177,6 +199,7 @@ Context-activated domain expertise — auto-activates during workflows.
 | competitor-analysis | Creative strategy extraction from competitor ads | Competitor Reference |
 | brand-compliance | Any FS ad creative work | All 6 |
 | quality-review | Post-generation brand QA check | All 6 |
+| style-presets | Visual style selection (4 presets + custom) | Create, Campaign |
 
 ### Image Generation Script
 

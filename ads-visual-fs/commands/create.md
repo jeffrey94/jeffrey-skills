@@ -92,7 +92,25 @@ When generating concept prompts in Step 3:
 - Copy direction: "All marketing copy must directly address the viewing AUDIENCE. The copy speaks TO the viewer, not to characters within the scene."
 - If FS Logo is selected: include in the prompt "Include the Funding Societies logo from the provided logo reference image. Place the logo with adequate clear space (minimum 1× logo mark width on all sides). Do not alter logo proportions, colors, or add effects."
 
+## Step 2c — Select Style Preset
+
+After visual elements are confirmed, use **Pattern E (Style Presets)** from `ask-user-protocol/SKILL.md`.
+
+Present with a conversational intro covering: what step we're at (choosing the visual style), why visual style matters (it defines the entire look — composition, framing devices, subject treatment, mood), and your suggestion based on the campaign goal and target audience (see Pattern E in ask-user-protocol).
+
+Then call AskUserQuestion with the 5 style options (Warm Showcase / Bold Professional / Tech Forward / Aspirational Shadow / Custom).
+
+If "Custom" is selected, prompt for a free-text style description.
+
+After selection, **read the reference image** for the chosen style from `style-presets/references/`. This ensures you understand the visual system before generating concepts.
+
+Then ask whether to pass the style reference image to Gemini (see "Passing Reference Image to Gemini" in `style-presets/SKILL.md`). This is a separate AskUserQuestion.
+
+Wait for both selections.
+
 ## Step 3 — Generate 3 Concept Variations
+
+**Apply the selected style preset as the primary visual direction.** Read the style's definition from `style-presets/references/style-directory.md` and include its Prompt Injection Fragment in every concept prompt. The style defines required elements, composition, and layout. Concept levels (SAFE/BOLD/EXPERIMENTAL) control creative distance, not visual style.
 
 Generate 3 creative concepts yourself:
 
@@ -168,24 +186,24 @@ If the user says "don't show prompts" or "hide prompts", omit this for subsequen
 
 For each selected concept, run the script via Bash:
 
-```bash
-# If FS Logo was NOT selected in Step 2b (and no user-provided logo):
-${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
-  --prompt "<concept prompt with FS brand colors (#F1F1F2, #FFDE0F, #5203EA, #27E4CD, #2C50FF), Poppins/Inter fonts, and negative prompts>" \
-  --image "./ads-output/create/<campaign-slug>/<level>.png" \
-  --ar "<from target platform>" \
-  --json
+Build the `--ref` arguments based on Step 2b (visual elements) and Step 2c (style preset) selections:
 
-# If FS Logo WAS selected in Step 2b:
+```bash
 ${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
-  --prompt "<concept prompt with FS brand colors, Poppins/Inter fonts, and negative prompts>" \
+  --prompt "<concept prompt with style injection, FS brand colors, Poppins/Inter fonts, negative prompts>" \
   --image "./ads-output/create/<campaign-slug>/<level>.png" \
-  --ref ${CLAUDE_PLUGIN_ROOT}/assets/fs-logo.png \
+  --ref <see ref logic below> \
   --ar "<from target platform>" \
   --json
 ```
 
-If the user also provided their own logo image via `$3`, use that instead of the bundled logo: `--ref <user-logo-path>`.
+**`--ref` logic (combine as needed):**
+- Style reference selected → include `${CLAUDE_PLUGIN_ROOT}/skills/style-presets/references/<style-image>` with `--strength 0.3`
+- FS Logo selected in Step 2b → include `${CLAUDE_PLUGIN_ROOT}/assets/fs-logo.png`
+- User-provided logo via `$3` → use that instead of bundled logo
+- Neither selected → omit `--ref` entirely (text-to-image mode)
+
+Multiple refs can be passed together: `--ref <style-ref> <logo>`
 
 **Runtime resolution**: If `bun` is installed, use `bun`. Otherwise use `npx -y bun`.
 

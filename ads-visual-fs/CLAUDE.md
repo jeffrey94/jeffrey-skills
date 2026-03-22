@@ -55,7 +55,7 @@ Every command follows the same flow. Guide the user through each step and wait f
 1. **Gather** — Collect campaign details (structured choices + free-text)
 2. **Analyze** — Extract insights from source image or brief
 3. **Confirm** — Present analysis for user review (do NOT proceed without confirmation)
-4. **Select** — Choose visual elements and concept levels
+4. **Select** — Choose visual elements, style preset (/create and /campaign only), and concept levels
 5. **Generate** — Create images via Gemini API
 6. **QA** — Auto-review each image for brand compliance; retry on gross failures
 7. **Review** — Present results, offer next steps (Regenerate / Refine / Resize)

@@ -43,9 +43,17 @@ Same as `/create` Step 2. Construct headline, support line, CTA, trust signals, 
 
 Use **Pattern B (Visual Element Presets)** from `ask-user-protocol/SKILL.md`. Present with conversational intro and platform-aware suggestion.
 
+## Step 2c — Select Style Preset
+
+Same as `/create` Step 2c. Use **Pattern E (Style Presets)** from `ask-user-protocol/SKILL.md`. The selected style preset will be applied consistently across all platforms in the campaign set.
+
+After selection, read the reference image for the chosen style from `style-presets/references/`. Then ask whether to pass the style reference image to Gemini (see `style-presets/SKILL.md`). The same choice applies to all platforms in the batch.
+
 ## Step 3 — Generate 3 Concept Variations
 
-Same as `/create` Step 3. Generate SAFE, BOLD, and EXPERIMENTAL concepts. Then use **Pattern C (Concept Selection)** — but always recommend selecting ONE concept (not "All Three") since `/campaign` will generate it across multiple platforms.
+**Apply the selected style preset as the primary visual direction** (same as `/create` Step 3). The style defines required elements, composition, and layout. Concept levels control creative distance.
+
+Generate SAFE, BOLD, and EXPERIMENTAL concepts. Then use **Pattern C (Concept Selection)** — but always recommend selecting ONE concept (not "All Three") since `/campaign` will generate it across multiple platforms.
 
 ## Step 4 — Select Platforms
 
@@ -103,7 +111,7 @@ ${BUN_X} ${CLAUDE_PLUGIN_ROOT}/scripts/generate-image.ts \
   --json
 ```
 
-If FS Logo was selected, add `--ref ${CLAUDE_PLUGIN_ROOT}/assets/fs-logo.png`. If the user provided a logo via argument, use that instead.
+**`--ref` logic (same as `/create`):** Combine style reference (if user opted in, with `--strength 0.3`) and FS logo (if selected in Step 2b) as `--ref` arguments. Multiple refs can be passed together. If user provided a logo via argument, use that instead of the bundled logo.
 
 If generating variants, append variant suffix: `<platform-key>-v1.png`, `<platform-key>-v2.png`. Each variant uses the SAME base prompt with ONE targeted change (alternate CTA text, warm vs cool colorway, or headline emphasis shift).
 

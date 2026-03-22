@@ -1,3 +1,14 @@
+---
+name: ask-user-protocol
+description: >
+  Activates during any ads-visual-fs command workflow when a structured user decision
+  is needed. Provides the 4-section conversational format (Context, Explanation, Suggestion,
+  Cost) and reusable patterns (Platform Selection, Visual Elements, Concept Selection,
+  Next Action, Style Presets). This is a shared UX protocol, not a user-facing workflow.
+metadata:
+  version: "0.9.1"
+---
+
 # AskUserQuestion Protocol
 
 Standardized format for every user decision point across all ads-visual-fs commands. This skill ensures consistent, low-friction interactions that guide users to good creative decisions.
@@ -179,6 +190,33 @@ Present after image generation completes. Options vary per command — each comm
 - If one concept is close but needs tweaks → suggest **Refine**
 - If the user has a winner and needs it on other platforms → suggest **Resize**
 - If none of the concepts hit the mark → suggest **Regenerate**
+
+---
+
+### Pattern E — Style Presets
+
+Present after visual element selection (Pattern B) and before concept generation. Used by `/create` and `/campaign` only.
+
+Reference `style-presets/SKILL.md` and `style-presets/references/style-directory.md` for full style definitions.
+
+Use AskUserQuestion with `preview` fields showing style breakdowns:
+
+| Label | Header | Description | Preview |
+|-------|--------|-------------|---------|
+| Warm Showcase | WARM | Photo-real person with 3D props, organic blob frame | `SUBJECT: Photo-real person + 3D props\nFRAME: Organic blob shape\nBACKGROUND: Solid color\nMOOD: Friendly, relatable, micro-SME` |
+| Bold Professional | BOLD_PRO | Photo-real person in teal photo mask, trust badges | `SUBJECT: Photo-real person in workplace\nFRAME: Teal rounded-rect mask\nACCENTS: Trust badge pill\nMOOD: Corporate, polished, established` |
+| Tech Forward | TECH | Person with device mockup, breaks out of frame | `SUBJECT: Person + phone mockup\nCOMPOSITION: Person breaks out of device\nBACKGROUND: Gradient\nMOOD: Digital transformation, growth` |
+| Aspirational Shadow | SHADOW | 3D subject casts dream-shadow of bigger version | `SUBJECT: 3D rendered (cart/stall)\nMETAPHOR: Shadow = bigger dream version\nBACKGROUND: Clean white/light gray\nMOOD: Minimal, editorial, aspirational` |
+| Custom | CUSTOM | Describe your own visual style | `You'll describe the visual style:\nsubject treatment, framing devices,\ncomposition approach, and mood.` |
+
+**For your suggestion**, reference the campaign goal:
+- Lead gen / product-focused → suggest **Warm Showcase** (relatable, high CTR for SME audience)
+- Corporate / trust-building → suggest **Bold Professional** (polished, credibility signals)
+- Digital product / fintech-forward → suggest **Tech Forward** (innovation narrative)
+- Aspirational / brand awareness → suggest **Aspirational Shadow** (emotional, editorial quality)
+
+If "Custom" is selected, follow up with a free-text prompt (NOT an AskUserQuestion):
+"Describe the visual style you want — include subject treatment (photo-realistic, 3D, illustrated), framing devices (shapes, masks, mockups), composition approach, and mood."
 
 ---
 
