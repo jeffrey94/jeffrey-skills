@@ -235,15 +235,13 @@ your-project/
 
 ### Setting Up CLAUDE.md
 
-A `CLAUDE.md` file tells Claude how to behave in your project. For marketing work, define the agent's role, workflow guidance, brand reference, and input awareness.
+The plugin includes a `CLAUDE.md` that frames Claude as a marketing executive who asks strategic questions (objective, audience, market, channels) before producing visuals. It's loaded automatically when the plugin is active.
 
-A ready-to-use template is included in the plugin:
+To customize it for your project, copy it to your project root and edit:
 
 ```bash
-cp examples/CLAUDE.md.example ./CLAUDE.md
+cp "$(claude plugin path ads-visual-fs)/CLAUDE.md" ./CLAUDE.md
 ```
-
-The template frames Claude as a marketing executive who asks strategic questions (objective, audience, market, channels) before producing visuals. Customize it for your team's workflow.
 
 ### Input Materials That Improve Output
 

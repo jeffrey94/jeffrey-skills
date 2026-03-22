@@ -60,7 +60,7 @@ fi
 if [ -f "./CLAUDE.md" ]; then
   check 0 "CLAUDE.md found"
 else
-  echo "  [WARN] No CLAUDE.md — copy examples/CLAUDE.md.example from the plugin for best results"
+  echo "  [WARN] No CLAUDE.md — the plugin includes one, but you can copy it to your project root to customize"
 fi
 
 echo ""
